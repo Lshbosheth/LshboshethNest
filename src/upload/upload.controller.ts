@@ -22,7 +22,8 @@ export class UploadController {
   })
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file) {
-    const content = 'Hello World!'; // Replace this with the content you want to upload
+    const contentBuffer: Buffer = file.buffer;
+    const content = contentBuffer.toString('utf-8');
     const url = await this.uploadService.uploadToVercelBlob(
       file.originalname,
       content,
