@@ -76,7 +76,7 @@ export class UtilsService {
     const blobs = result && result.blobs;
 
     if (blobs && Array.isArray(blobs)) {
-      await Promise.all(blobs.map((blobUrl: string) => del(blobUrl)));
+      await Promise.all(blobs.map((blobUrl) => del(blobUrl.url)));
     }
   }
 }
