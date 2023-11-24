@@ -39,7 +39,7 @@ export class UtilsController {
     summary: '清除上传文件',
   })
   @ApiParam({ name: 'url', description: '删除文件Url' })
-  clearAllBlob(@Param('url') url: string) {
+  clearAllBlob(@Param('url') url: URL) {
     return this.utilsService.deleteOneBlob(url);
   }
 
