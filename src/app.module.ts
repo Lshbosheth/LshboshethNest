@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VercelConfig } from './ormconfig';
 import { UploadModule } from './upload/upload.module';
+import { UtilsModule } from './utils/utils.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UploadModule } from './upload/upload.module';
     TypeOrmModule.forRoot(VercelConfig),
     UserModule,
     UploadModule,
+    UtilsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
