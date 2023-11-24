@@ -9,9 +9,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.setGlobalPrefix('api');
   generateDocument(app);
   const port = +process.env.SERVICE_PORT;
-  console.log(port);
   await app.listen(port, () => {
     console.group(`项目运行在 http://localhost:${port}/api/swagger`);
     console.groupEnd();
