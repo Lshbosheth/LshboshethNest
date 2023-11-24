@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, ParseIntPipe  } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
 import { QrCodeDto } from './dto/qrCode.dto';
@@ -39,7 +39,7 @@ export class UtilsController {
     summary: '清除上传文件',
   })
   @ApiParam({ name: 'url', description: '删除文件Url' })
-  clearAllBlob(@Param('url') url: URL) {
+  deleteOneBlob(@Param('url', ParseIntPipe) url: string) {
     return this.utilsService.deleteOneBlob(url);
   }
 
