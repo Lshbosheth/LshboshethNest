@@ -23,10 +23,9 @@ export class UploadController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file) {
     const contentBuffer: Buffer = file.buffer;
-    const content = contentBuffer.toString('utf-8');
     const url = await this.uploadService.uploadToVercelBlob(
       file.originalname,
-      content,
+      contentBuffer,
     );
     return { path: url, name: file.originalname };
   }
