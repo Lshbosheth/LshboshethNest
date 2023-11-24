@@ -62,10 +62,8 @@ export class UtilsService {
     return checksumMap[remainder];
   }
 
-  async deleteOneBlob(url: string | URL) {
-    const { searchParams } = new URL(url);
-    const urlToDelete = searchParams.get('url') as string;
-    return await del(urlToDelete);
+  async deleteOneBlob(url: string) {
+    return await del(url);
   }
 
   async getAllBlob() {
