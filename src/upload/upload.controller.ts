@@ -4,7 +4,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiConsumes, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
 import { CreateUploadDto } from './dto/create-upload.dto';
@@ -19,6 +19,9 @@ export class UploadController {
   @ApiBody({
     description: '文件上传',
     type: CreateUploadDto,
+  })
+  @ApiOperation({
+    summary: '文件上传',
   })
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file) {

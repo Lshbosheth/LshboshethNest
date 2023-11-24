@@ -74,7 +74,6 @@ export class UtilsService {
   async clearAllBlob(): Promise<void> {
     const result: any = await list();
     const blobs = result && result.blobs;
-
     if (blobs && Array.isArray(blobs)) {
       await Promise.all(blobs.map((blobUrl) => del(blobUrl.url)));
     }
