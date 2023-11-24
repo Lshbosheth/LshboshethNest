@@ -3,6 +3,7 @@ import * as dayjs from 'dayjs';
 import { areas } from '../static/areas';
 import { QrCodeDto } from './dto/qrCode.dto';
 import * as QRCode from 'qrcode';
+import { del, list } from '@vercel/blob';
 
 @Injectable()
 export class UtilsService {
@@ -59,5 +60,17 @@ export class UtilsService {
     const checksumMap = [1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2];
 
     return checksumMap[remainder];
+  }
+
+  async deleteOneBlob(url) {
+    const { searchParams } = new URL(url);
+    const urlToDelete = searchParams.get('url') as string;
+    await del(urlToDelete);
+    return '删除成功';
+  }
+
+  async getAllBlob() {
+    const { blobs } = await list();
+    return blobs;
   }
 }

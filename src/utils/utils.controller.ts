@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
 import { QrCodeDto } from './dto/qrCode.dto';
@@ -32,5 +32,22 @@ export class UtilsController {
       qrCodeBase64,
     );
     return { path: url, name: 'qrCode.jpg' };
+  }
+
+  @Delete('/clearBlob/:url')
+  @ApiOperation({
+    summary: '清除上传文件',
+  })
+  @ApiParam({ name: 'url', description: '删除文件Url' })
+  clearAllBlob(@Param('url') url: string) {
+    return this.utilsService.deleteOneBlob(url);
+  }
+
+  @Get('/allBlob')
+  @ApiOperation({
+    summary: '获取所有上传文件列表',
+  })
+  getAllBlob() {
+    return this.utilsService.getAllBlob();
   }
 }
