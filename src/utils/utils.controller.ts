@@ -43,6 +43,14 @@ export class UtilsController {
     return this.utilsService.deleteOneBlob(url);
   }
 
+  @Delete('/clearAllBlob')
+  @ApiOperation({
+    summary: '清除所有上传文件',
+  })
+  clearAllBlob() {
+    return this.utilsService.clearAllBlob();
+  }
+
   @Get('/allBlob')
   @ApiOperation({
     summary: '获取所有上传文件列表',

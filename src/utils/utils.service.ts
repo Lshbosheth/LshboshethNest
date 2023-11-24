@@ -3,7 +3,7 @@ import * as dayjs from 'dayjs';
 import { areas } from '../static/areas';
 import { QrCodeDto } from './dto/qrCode.dto';
 import * as QRCode from 'qrcode';
-import { del, list } from '@vercel/blob';
+import { del, list, ListFoldedBlobResult } from '@vercel/blob';
 
 @Injectable()
 export class UtilsService {
@@ -63,11 +63,20 @@ export class UtilsService {
   }
 
   async deleteOneBlob(url: string) {
-    return await del(url);
+    return del(url);
   }
 
   async getAllBlob() {
     const { blobs } = await list();
     return blobs;
+  }
+
+  async clearAllBlob(): Promise<void> {
+    const result: any = await list();
+    const blobs = result && result.blobs;
+
+    if (blobs && Array.isArray(blobs)) {
+      await Promise.all(blobs.map((blobUrl: string) => del(blobUrl)));
+    }
   }
 }
