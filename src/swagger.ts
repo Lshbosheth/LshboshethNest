@@ -3,7 +3,7 @@ import * as packageConfig from '../package.json';
 import { INestApplication } from '@nestjs/common';
 
 export const generateDocument = (app: INestApplication<any>) => {
-  const swaggerCDN = 'https://js.cdn.haah.net/npm/swagger-ui-dist@5.7.2';
+  const swaggerCDN = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.7.2';
   const options = new DocumentBuilder()
     .setTitle(packageConfig.name)
     .setDescription(packageConfig.description)
