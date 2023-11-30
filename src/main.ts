@@ -10,7 +10,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.setGlobalPrefix('api');
-  app.enableCors();
+  app.enableCors({
+    origin: '*'
+  });
   generateDocument(app);
   const port = +process.env.SERVICE_PORT;
   await app.listen(port, () => {
