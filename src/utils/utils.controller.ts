@@ -62,18 +62,27 @@ export class UtilsController {
   }
 
   @Get('/allConfig')
+  @ApiOperation({
+    summary: '获取所有配置项',
+  })
   async getAllConfigs() {
     const configs = await this.utilsService.getAllConfigs();
     return configs;
   }
 
   @Post('/createdConfig')
+  @ApiOperation({
+    summary: '创建配置项',
+  })
   async createConfig(@Body() createConfigDto: CreateConfigDto) {
     const createdConfig = await this.utilsService.createConfig(createConfigDto);
     return createdConfig;
   }
 
   @Put('/updateConfig')
+  @ApiOperation({
+    summary: '更新配置项',
+  })
   async updateConfig(@Body() updateConfigDto: UpdateConfigDto) {
     console.log(updateConfigDto);
     const editedConfig = await this.utilsService.updateConfig(updateConfigDto);
