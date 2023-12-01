@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as dayjs from 'dayjs';
 import { areas } from '../static/areas';
 import { QrCodeDto } from './dto/qrCode.dto';
+import { CreateConfigDto } from './dto/create-config.dto';
+import { UpdateConfigDto } from './dto/update-config.dto';
 import * as QRCode from 'qrcode';
 import { del, list, ListFoldedBlobResult } from '@vercel/blob';
-
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Config } from './entities/config.entity';
 @Injectable()
 export class UtilsService {
+  constructor(@InjectRepository(Config) private config: Repository<Config>) {}
   async createIdCard(sex: string) {
     return this.idNumber(sex);
   }
@@ -77,5 +82,41 @@ export class UtilsService {
     if (blobs && Array.isArray(blobs)) {
       await Promise.all(blobs.map((blobUrl) => del(blobUrl.url)));
     }
+  }
+
+  async getAllConfigs(): Promise<{ [key: string]: string }> {
+    const configs = await this.config.find();
+    const result = {};
+    configs.forEach((config) => {
+      result[config.configName] = config.configValue;
+    });
+
+    return result;
+  }
+
+  async createConfig(createConfigDto: CreateConfigDto) {
+    const config = new Config();
+    config.configName = createConfigDto.configName;
+    config.configValue = createConfigDto.configValue;
+    config.description = createConfigDto.description;
+    return await this.config.save(config);
+  }
+
+  async updateConfig(updateConfigDto: UpdateConfigDto) {
+    const { configName, configValue } = updateConfigDto;
+
+    const existingConfig = await this.config.findOne({ where: { configName } });
+
+    if (!existingConfig) {
+      throw new NotFoundException(`Config with name ${configName} not found`);
+    }
+
+    // 更新配置项数据
+    if (configValue !== undefined) {
+      existingConfig.configValue = configValue;
+    }
+
+    const savedConfig = await this.config.save(existingConfig);
+    return savedConfig;
   }
 }

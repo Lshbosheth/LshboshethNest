@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
 import { QrCodeDto } from './dto/qrCode.dto';
+import { CreateConfigDto } from './dto/create-config.dto';
+import { UpdateConfigDto } from './dto/update-config.dto';
 import { UploadService } from '../upload/upload.service';
 
 @ApiTags('工具模块')
@@ -57,5 +59,24 @@ export class UtilsController {
   })
   getAllBlob() {
     return this.utilsService.getAllBlob();
+  }
+
+  @Get('/allConfig')
+  async getAllConfigs() {
+    const configs = await this.utilsService.getAllConfigs();
+    return configs;
+  }
+
+  @Post('/createdConfig')
+  async createConfig(@Body() createConfigDto: CreateConfigDto) {
+    const createdConfig = await this.utilsService.createConfig(createConfigDto);
+    return createdConfig;
+  }
+
+  @Put('/updateConfig')
+  async updateConfig(@Body() updateConfigDto: UpdateConfigDto) {
+    console.log(updateConfigDto);
+    const editedConfig = await this.utilsService.updateConfig(updateConfigDto);
+    return editedConfig;
   }
 }
