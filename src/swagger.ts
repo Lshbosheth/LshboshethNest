@@ -16,5 +16,6 @@ export const generateDocument = (app: INestApplication<any>) => {
       `${swaggerCDN}/swagger-ui-bundle.js`,
       `${swaggerCDN}/swagger-ui-standalone-preset.js`,
     ],
+    customSiteTitle: 'Lshbosheth | API',
   });
 };
