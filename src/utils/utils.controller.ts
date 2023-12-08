@@ -94,6 +94,7 @@ export class UtilsController {
     summary: '微信小程序测试',
   })
   async wechatPush(@Query() query: any) {
+    console.log(query)
     const checkSignature = this.utilsService.checkSignature(query);
     return checkSignature;
   }
