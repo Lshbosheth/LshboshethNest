@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
 import { QrCodeDto } from './dto/qrCode.dto';
@@ -95,10 +95,6 @@ export class UtilsController {
   })
   async wechatPush(@Query() query: any) {
     const checkSignature = this.utilsService.checkSignature(query);
-    if (checkSignature) {
-      return true;
-    } else {
-      return false;
-    }
+    return checkSignature;
   }
 }
