@@ -88,4 +88,17 @@ export class UtilsController {
     const editedConfig = await this.utilsService.updateConfig(updateConfigDto);
     return editedConfig;
   }
+
+  @Get('/wechatPush')
+  @ApiOperation({
+    summary: '获取所有配置项',
+  })
+  async wechatPush(@Query() query: any) {
+    const checkSignature = this.utilsService.checkSignature(query);
+    if (checkSignature) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
