@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import {ApiProperty} from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 export class CreateConfigDto {
   @IsNotEmpty({ message: '配置名不能为空' })
   @ApiProperty({

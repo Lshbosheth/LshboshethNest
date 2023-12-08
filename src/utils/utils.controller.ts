@@ -18,7 +18,7 @@ export class UtilsController {
   @ApiOperation({
     summary: '生成身份证号',
   })
-  @ApiParam({ name: 'sex', description: '性别，1表示男性，2表示女性' })
+  @ApiParam({ name: 'sex', description: '性别,1表示男性,2表示女性' })
   createIdCard(@Param('sex') sex: string) {
     return this.utilsService.createIdCard(sex);
   }
