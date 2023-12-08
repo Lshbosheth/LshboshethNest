@@ -91,7 +91,7 @@ export class UtilsController {
 
   @Get('/wechatPush')
   @ApiOperation({
-    summary: '获取所有配置项',
+    summary: '微信小程序测试',
   })
   async wechatPush(@Query() query: any) {
     const checkSignature = this.utilsService.checkSignature(query);
