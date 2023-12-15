@@ -9,7 +9,7 @@ const VercelConfig: TypeOrmModuleOptions = {
   database: 'verceldb',
   ssl: { rejectUnauthorized: false }, // For local development, consider removing this in production
   synchronize: true, // Automatically create database tables based on entities (set to false in production)
-  logging: true, // Enable SQL logging
+  logging: process.env.NODE_ENV === 'development' ? true : ['error'],
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
 };
 
@@ -24,6 +24,7 @@ const MySqlLocalConfig: TypeOrmModuleOptions = {
   retryDelay: 500,
   retryAttempts: 10,
   autoLoadEntities: true,
+  logging: process.env.NODE_ENV === 'development' ? true : ['error'],
 };
 
 export { VercelConfig, MySqlLocalConfig };

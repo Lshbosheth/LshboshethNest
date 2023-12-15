@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VercelConfig } from './ormconfig';
 import { UploadModule } from './upload/upload.module';
 import { UtilsModule } from './utils/utils.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UtilsModule } from './utils/utils.module';
     UserModule,
     UploadModule,
     UtilsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
