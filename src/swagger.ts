@@ -5,6 +5,7 @@ import { INestApplication } from '@nestjs/common';
 export const generateDocument = (app: INestApplication<any>) => {
   const swaggerCDN = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.7.2';
   const options = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle(packageConfig.name)
     .setDescription(packageConfig.description)
     .setVersion(packageConfig.version)
