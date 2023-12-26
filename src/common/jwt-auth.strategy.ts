@@ -18,7 +18,7 @@ export default class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: JwtPayload) {
-    console.log(payload.username);
+    // jwt鉴权通过后，会返回鉴权信息，然后将对象设置在req.user上面
     const { username } = payload;
     return {
       username,

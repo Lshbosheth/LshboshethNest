@@ -4,7 +4,13 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiConsumes, ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiConsumes,
+  ApiBody,
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
 import { CreateUploadDto } from './dto/create-upload.dto';
@@ -14,6 +20,7 @@ import { CreateUploadDto } from './dto/create-upload.dto';
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
+  @ApiBearerAuth()
   @Post()
   @ApiConsumes('multipart/form-data')
   @ApiBody({
