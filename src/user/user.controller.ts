@@ -6,39 +6,38 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { Public } from '../common/public.decorator';
-import { Request } from 'express';
+import { AccessTokenGuard } from '../common/guards/accessToken.guard';
 
 @ApiTags('用户模块')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Public()
-  @Post()
-  @ApiOperation({
-    summary: '添加用户',
-  })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
+  // @Post()
+  // @ApiOperation({
+  //   summary: '添加用户',
+  // })
+  // create(@Body() createUserDto: CreateUserDto) {
+  //   return this.userService.create(createUserDto);
+  // }
 
+  @UseGuards(AccessTokenGuard)
   @ApiBearerAuth()
   @Get()
   @ApiOperation({
     summary: '查找所有用户',
   })
-  findAll(@Req() req: Request) {
-    console.log(req.user);
+  findAll() {
     return this.userService.findAll();
   }
 
+  @UseGuards(AccessTokenGuard)
   @ApiBearerAuth()
   @Get(':id')
   @ApiOperation({
@@ -48,6 +47,7 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @UseGuards(AccessTokenGuard)
   @ApiBearerAuth()
   @Patch(':id')
   @ApiOperation({
@@ -57,6 +57,7 @@ export class UserController {
     return this.userService.update(id, updateUserDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({

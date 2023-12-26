@@ -1,14 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Get, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Public } from '../common/public.decorator';
+import { RefreshTokenGuard } from '../common/guards/refreshToken.guard';
+import { Request } from 'express';
 
 @ApiTags('登录鉴权')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @Public()
   @Post('/login')
   @ApiOperation({
     summary: '登录',
@@ -17,12 +17,22 @@ export class AuthController {
     return this.authService.login(AuthDto);
   }
 
-  @Public()
   @Post('/signUp')
   @ApiOperation({
     summary: '注册',
   })
   signUp(@Body() AuthDto: CreateAuthDto) {
     return this.authService.signUp(AuthDto);
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
+  @ApiOperation({
+    summary: '刷新token',
+  })
+  refreshTokens(@Req() req: Request) {
+    const userId = req.user['sub'];
+    const refreshToken = req.user['refreshToken'];
+    return this.authService.refreshTokens(userId, refreshToken);
   }
 }

@@ -13,4 +13,5 @@ export class CreateAuthDto {
     description: '密码',
   })
   password: string;
+  refreshToken?: string;
 }
