@@ -5,6 +5,7 @@ import { QrCodeDto } from './dto/qrCode.dto';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
 import { UploadService } from '../upload/upload.service';
+import { Public } from '../common/public.decorator';
 
 @ApiTags('工具模块')
 @Controller('utils')
@@ -14,6 +15,7 @@ export class UtilsController {
     private readonly uploadService: UploadService,
   ) {}
 
+  @Public()
   @Get('/createIdCard/:sex')
   @ApiOperation({
     summary: '生成身份证号',
@@ -23,6 +25,7 @@ export class UtilsController {
     return this.utilsService.createIdCard(sex);
   }
 
+  @Public()
   @Post('/qrCode')
   @ApiOperation({
     summary: '生成qrCode',
@@ -36,6 +39,7 @@ export class UtilsController {
     return { path: url, name: 'qrCode.jpg' };
   }
 
+  @Public()
   @Delete('/clearBlob/:url')
   @ApiOperation({
     summary: '清除上传文件',
@@ -45,6 +49,7 @@ export class UtilsController {
     return this.utilsService.deleteOneBlob(url);
   }
 
+  @Public()
   @Delete('/clearAllBlob')
   @ApiOperation({
     summary: '清除所有上传文件',
@@ -53,6 +58,7 @@ export class UtilsController {
     return this.utilsService.clearAllBlob();
   }
 
+  @Public()
   @Get('/allBlob')
   @ApiOperation({
     summary: '获取所有上传文件列表',
@@ -61,6 +67,7 @@ export class UtilsController {
     return this.utilsService.getAllBlob();
   }
 
+  @Public()
   @Get('/allConfig')
   @ApiOperation({
     summary: '获取所有配置项',
@@ -70,6 +77,7 @@ export class UtilsController {
     return configs;
   }
 
+  @Public()
   @Post('/createdConfig')
   @ApiOperation({
     summary: '创建配置项',
@@ -79,6 +87,7 @@ export class UtilsController {
     return createdConfig;
   }
 
+  @Public()
   @Put('/updateConfig')
   @ApiOperation({
     summary: '更新配置项',
@@ -89,12 +98,13 @@ export class UtilsController {
     return editedConfig;
   }
 
+  @Public()
   @Get('/wechatPush')
   @ApiOperation({
     summary: '微信小程序测试',
   })
   async wechatPush(@Query() query: any) {
-    console.log(query)
+    console.log(query);
     const checkSignature = this.utilsService.checkSignature(query);
     return checkSignature;
   }
