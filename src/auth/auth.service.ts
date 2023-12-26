@@ -53,6 +53,10 @@ export class AuthService {
     };
   }
 
+  async logout(userId: string) {
+    await this.userService.update(userId, { refreshToken: null });
+  }
+
   async refreshTokens(userId: string, refreshToken: string) {
     const findUser = await this.user.findOne({
       where: { id: userId },
