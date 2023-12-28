@@ -14,6 +14,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
 import { CreateUploadDto } from './dto/create-upload.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @ApiTags('上传文件')
 @Controller('upload')
@@ -34,7 +35,7 @@ export class UploadController {
   async uploadFile(@UploadedFile() file) {
     const contentBuffer: Buffer = file.buffer;
     const url = await this.uploadService.uploadToVercelBlob(
-      file.originalname,
+      uuidv4(),
       contentBuffer,
     );
     return await this.uploadService.storeFiles(
