@@ -33,15 +33,10 @@ export class UploadController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file) {
     const contentBuffer: Buffer = file.buffer;
-    const originalName = Buffer.from(file.originalname, 'binary').toString(
-      'utf-8',
-    );
-    console.log(file)
-    console.log(originalName);
     const url = await this.uploadService.uploadToVercelBlob(
-      originalName,
+      file.originalname,
       contentBuffer,
     );
-    return await this.uploadService.storeFiles(url, originalName);
+    return await this.uploadService.storeFiles(url, file.originalname, file.size);
   }
 }
