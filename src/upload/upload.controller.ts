@@ -36,6 +36,7 @@ export class UploadController {
     const originalName = Buffer.from(file.originalname, 'binary').toString(
       'utf-8',
     );
+    console.log(file)
     console.log(originalName);
     const url = await this.uploadService.uploadToVercelBlob(
       originalName,
