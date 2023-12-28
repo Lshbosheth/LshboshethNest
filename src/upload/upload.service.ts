@@ -18,6 +18,7 @@ export class UploadService {
     files.fileUrl = url;
     files.fileSize = name;
     files.fileType = name;
+    console.log(files, 'files内容');
     return this.files.save(files);
   }
 }
