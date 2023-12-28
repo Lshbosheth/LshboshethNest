@@ -40,6 +40,6 @@ export class UploadController {
       originalName,
       contentBuffer,
     );
-    return { path: url, name: originalName };
+    return await this.uploadService.storeFiles(url, originalName);
   }
 }
