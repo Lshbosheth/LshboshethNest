@@ -8,5 +8,6 @@ import { Config } from './entities/config.entity';
   imports: [TypeOrmModule.forFeature([Config]), UploadModule],
   providers: [UtilsService],
   controllers: [UtilsController],
+  exports: [UtilsService],
 })
 export class UtilsModule {}

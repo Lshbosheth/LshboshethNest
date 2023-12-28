@@ -8,6 +8,7 @@ import { VercelConfig } from './ormconfig';
 import { UploadModule } from './upload/upload.module';
 import { UtilsModule } from './utils/utils.module';
 import { AuthModule } from './auth/auth.module';
+import { FileManageModule } from './file-manage/file-manage.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     UploadModule,
     UtilsModule,
     AuthModule,
+    FileManageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
