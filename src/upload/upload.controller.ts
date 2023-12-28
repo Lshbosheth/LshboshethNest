@@ -37,6 +37,10 @@ export class UploadController {
       file.originalname,
       contentBuffer,
     );
-    return await this.uploadService.storeFiles(url, file.originalname, file.size);
+    return await this.uploadService.storeFiles(
+      url,
+      file.originalname,
+      file.size,
+    );
   }
 }
