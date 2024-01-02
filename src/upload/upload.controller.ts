@@ -37,8 +37,10 @@ export class UploadController {
     const originalName = Buffer.from(file.originalname, 'binary').toString(
       'utf-8',
     );
+    const fileType =
+      originalName.split('.')[originalName.split('.').length - 1];
     const url = await this.uploadService.uploadToVercelBlob(
-      uuidv4(),
+      uuidv4() + '.' + fileType,
       contentBuffer,
     );
     return await this.uploadService.storeFiles(url, originalName, file.size);
