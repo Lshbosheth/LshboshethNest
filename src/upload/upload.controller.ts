@@ -32,16 +32,15 @@ export class UploadController {
     summary: '文件上传',
   })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file) {
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
     const contentBuffer: Buffer = file.buffer;
+    const originalName = Buffer.from(file.originalname, 'binary').toString(
+      'utf-8',
+    );
     const url = await this.uploadService.uploadToVercelBlob(
       uuidv4(),
       contentBuffer,
     );
-    return await this.uploadService.storeFiles(
-      url,
-      file.originalname,
-      file.size,
-    );
+    return await this.uploadService.storeFiles(url, originalName, file.size);
   }
 }
