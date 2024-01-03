@@ -107,4 +107,12 @@ export class UtilsController {
     const checkSignature = this.utilsService.checkSignature(query);
     return checkSignature;
   }
+
+  @Delete('/test')
+  @ApiOperation({
+    summary: '删除测试',
+  })
+  remove() {
+    return '123';
+  }
 }
