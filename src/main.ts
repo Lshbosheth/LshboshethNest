@@ -12,9 +12,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.setGlobalPrefix('api');
-  app.enableCors({
-    origin: '*',
-  });
+  app.enableCors();
   app.useStaticAssets('public');
   generateDocument(app);
   const port = +process.env.SERVICE_PORT;
