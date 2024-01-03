@@ -108,17 +108,4 @@ export class UtilsController {
     const checkSignature = this.utilsService.checkSignature(query);
     return checkSignature;
   }
-
-  @Delete('/test')
-  @ApiOperation({
-    summary: '删除测试',
-  })
-  remove() {
-    return '123';
-  }
-
-  @Options()
-  options(): void {
-    // 这里可以不写任何内容，因为默认的CORS中间件应该会处理相关头部
-  }
 }
