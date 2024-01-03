@@ -21,6 +21,7 @@ export class FileManageController {
     summary: '查找单个文件',
   })
   findOne(@Param('id') id: string) {
+    console.log('findOnefindOnefindOnefindOne');
     return this.fileManageService.findOne(id);
   }
 
@@ -40,6 +41,7 @@ export class FileManageController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
+    console.log('DeleteDeleteDeleteDelete');
     return this.fileManageService.remove(id);
   }
 }
