@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UpdateFileManageDto } from './dto/update-file-manage.dto';
 import { Files } from '../upload/entities/upload.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { UtilsService } from '../utils/utils.service';
 
 @Injectable()
@@ -13,7 +13,9 @@ export class FileManageService {
   ) {}
 
   findAll() {
-    return this.files.find().filter(file => file.id !== 'e88bbd24-919f-43c9-a58b-5ad5aa518a66');
+    return this.files.find({
+      where: { id: Not('e88bbd24-919f-43c9-a58b-5ad5aa518a66') },
+    });
   }
 
   async findOne(id: string) {
