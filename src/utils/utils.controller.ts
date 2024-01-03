@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Options,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
@@ -114,5 +115,10 @@ export class UtilsController {
   })
   remove() {
     return '123';
+  }
+
+  @Options()
+  options(): void {
+    // 这里可以不写任何内容，因为默认的CORS中间件应该会处理相关头部
   }
 }
