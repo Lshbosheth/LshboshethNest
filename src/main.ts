@@ -5,6 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './global/interceptor/transform/transform.interceptor';
 import { HttpExceptionFilter } from './global/filter/http-exception/http-exception.filter';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -15,6 +16,7 @@ async function bootstrap() {
   app.enableCors({
     origin: '*',
   });
+  app.use(compression());
   app.useStaticAssets('public');
   generateDocument(app);
   const port = +process.env.SERVICE_PORT;
