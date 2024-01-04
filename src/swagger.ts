@@ -19,6 +19,6 @@ export const generateDocument = (app: INestApplication<any>) => {
     ],
     customSiteTitle: 'Lshbosheth | API',
     customfavIcon:
-      'https://radzcxbxmpc5hqj1.public.blob.vercel-storage.com/afce6ac2-92d0-4de3-b349-150e42b2a28a-vqGPXyxCpNhYTWL6EAqZ5lMFLkB7Vt.jpg',
+      'https://radzcxbxmpc5hqj1.public.blob.vercel-storage.com/ce9315b5-e569-4f24-be25-2926db620425-iFL6GIhgqpPysaBMIGCR4QP2yJ2M7S.png',
   });
 };

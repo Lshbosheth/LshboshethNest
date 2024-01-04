@@ -14,7 +14,7 @@ export class FileManageService {
 
   findAll() {
     return this.files.find({
-      where: { id: Not('e88bbd24-919f-43c9-a58b-5ad5aa518a66') },
+      where: { id: Not('ead9805f-1943-47b6-a2f1-5c101ec1b29e') },
     });
   }
 
