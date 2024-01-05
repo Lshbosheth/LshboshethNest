@@ -9,6 +9,7 @@ import { UploadModule } from './upload/upload.module';
 import { UtilsModule } from './utils/utils.module';
 import { AuthModule } from './auth/auth.module';
 import { FileManageModule } from './file-manage/file-manage.module';
+import { QiniuModule } from './qiniu/qiniu.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { FileManageModule } from './file-manage/file-manage.module';
     UtilsModule,
     AuthModule,
     FileManageModule,
+    QiniuModule,
   ],
   controllers: [AppController],
   providers: [AppService],
