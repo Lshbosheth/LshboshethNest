@@ -8,6 +8,7 @@ import {
   Put,
   Query,
   Options,
+  Res,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
@@ -15,6 +16,7 @@ import { QrCodeDto } from './dto/qrCode.dto';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
 import { UploadService } from '../upload/upload.service';
+import { Response } from 'express';
 
 @ApiTags('工具模块')
 @Controller('utils')
@@ -103,9 +105,15 @@ export class UtilsController {
   @ApiOperation({
     summary: '微信小程序测试',
   })
-  async wechatPush(@Query() query: any) {
+  async wechatPush(@Query() query: any, @Res() res: Response) {
     console.log(query);
-    const checkSignature = this.utilsService.checkSignature(query);
-    return checkSignature;
+    const { signature, timestamp, nonce, echostr } = query;
+    const checkSignature = this.utilsService.checkSignature(signature, timestamp, nonce);
+    console.log(checkSignature)
+    if (checkSignature) {
+      res.send(echostr)
+    }else {
+      res.send('Invalid signature')
+    }
   }
 }

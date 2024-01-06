@@ -120,14 +120,11 @@ export class UtilsService {
     return savedConfig;
   }
 
-  checkSignature(query: any): boolean {
-    const { signature, timestamp, nonce } = query;
+  checkSignature(signature: any, timestamp: any, nonce: any): boolean {
     const token = 'NAna0218';
-
     const tmpArr = [token, timestamp, nonce].sort((a, b) => a.localeCompare(b));
     const tmpStr = tmpArr.join('');
     const hashedStr = require('crypto').createHash('sha1').update(tmpStr).digest('hex');
-
     return hashedStr === signature;
   }
 }
