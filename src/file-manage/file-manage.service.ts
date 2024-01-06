@@ -28,7 +28,6 @@ export class FileManageService {
 
   async remove(id: string) {
     const file = await this.files.findOne({ where: { id } });
-    console.log(file);
     await this.utilsService.deleteOneBlob(file.fileUrl);
     return await this.files.delete(id);
   }

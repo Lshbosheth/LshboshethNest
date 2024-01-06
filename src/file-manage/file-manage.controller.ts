@@ -4,7 +4,7 @@ import { UpdateFileManageDto } from './dto/update-file-manage.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('文件管理')
-@Controller('file-manage')
+@Controller('fileManage')
 export class FileManageController {
   constructor(private readonly fileManageService: FileManageService) {}
 
@@ -41,7 +41,6 @@ export class FileManageController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    console.log('DeleteDeleteDeleteDelete');
     return this.fileManageService.remove(id);
   }
 }
