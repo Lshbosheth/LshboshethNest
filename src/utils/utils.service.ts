@@ -9,6 +9,8 @@ import { del, list } from '@vercel/blob';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Config } from './entities/config.entity';
+import axios from 'axios';
+
 @Injectable()
 export class UtilsService {
   constructor(@InjectRepository(Config) private config: Repository<Config>) {}
@@ -126,5 +128,73 @@ export class UtilsService {
     const tmpStr = tmpArr.join('');
     const hashedStr = require('crypto').createHash('sha1').update(tmpStr).digest('hex');
     return hashedStr === signature;
+  }
+
+  async pushMsg(msgData: any) {
+    const tempId = '9ODFxKcrCNDP7kLdgY8lRPtMpMEVCK9ihUuW6kWdnu0'
+    const openId = 'oq7pJ5fjlzxMwmWXpTkK8qfBx8mc' //myopenid
+    const token = await this.getWechatToken()
+    const url = `https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=${token}`;
+    try {
+      const response = await axios.post(url, {
+        params: {
+          access_token: token,
+          template_id: tempId,
+          grant_type: 'authorization_code',
+          touser: openId,
+          data:  { "thing1": '123', time2: '222' },
+          miniprogram_state: 'formal',
+          lang: 'zh_CN'
+        }
+      });
+      console.log(response.data);
+      if (response.data && response.data.access_token) {
+        return response.data
+      }
+    } catch (error) {
+
+    }
+  }
+
+  async getOpenId(code: string) {
+    const appId = 'wx8d1aa3c9bfb8be3a';
+    const appSecret = '745fcbcf462c3a99122e6f920879fdde';
+    const url = 'https://api.weixin.qq.com/sns/jscode2session';
+    try {
+      const response = await axios.get(url, {
+        params: {
+          js_code: code,
+          grant_type: 'authorization_code',
+          appid: appId,
+          secret: appSecret,
+        }
+      });
+      if (response.data) {
+        return response.data.openid
+      }
+    } catch (error) {
+      console.error('Error updating WeChat access token:', error);
+    }
+  }
+
+  async getWechatToken() {
+    const url = 'https://api.weixin.qq.com/cgi-bin/token';
+    const appId = 'wx8d1aa3c9bfb8be3a';
+    const appSecret = '745fcbcf462c3a99122e6f920879fdde';
+    try {
+      const response = await axios.get(url, {
+        params: {
+          grant_type: 'client_credential',
+          appid: appId,
+          secret: appSecret,
+        }
+      });
+      console.log(response);
+      if (response.data && response.data.access_token) {
+        return response.data.access_token
+      }
+    } catch (error) {
+      console.error('Error updating WeChat access token:', error);
+    }
   }
 }

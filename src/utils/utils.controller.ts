@@ -116,4 +116,25 @@ export class UtilsController {
       res.send('Invalid signature')
     }
   }
+
+  @Post('/pushMessage')
+  @ApiOperation({
+    summary: '推送微信消息',
+  })
+  async pushMessage(@Body() msgData: any) {
+    const msgPush = await this.utilsService.pushMsg(msgData);
+    return msgPush;
+  }
+
+
+  @Get('/openID')
+  @ApiOperation({
+    summary: 'openID',
+  })
+  async openid(@Query('code') code: string) {
+    const openId = await this.utilsService.getOpenId(code);
+    return openId;
+  }
+
+
 }
