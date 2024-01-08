@@ -5,7 +5,6 @@ import { QrCodeDto } from './dto/qrCode.dto';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
 import * as QRCode from 'qrcode';
-import { del, list } from '@vercel/blob';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Config } from './entities/config.entity';
@@ -66,23 +65,6 @@ export class UtilsService {
     const checksumMap = [1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2];
 
     return checksumMap[remainder];
-  }
-
-  async deleteOneBlob(url: string) {
-    return del(url);
-  }
-
-  async getAllBlob() {
-    const { blobs } = await list();
-    return blobs;
-  }
-
-  async clearAllBlob(): Promise<void> {
-    const result: any = await list();
-    const blobs = result && result.blobs;
-    if (blobs && Array.isArray(blobs)) {
-      await Promise.all(blobs.map((blobUrl) => del(blobUrl.url)));
-    }
   }
 
   async getAllConfigs(): Promise<{ [key: string]: string }> {

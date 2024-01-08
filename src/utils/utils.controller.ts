@@ -1,29 +1,14 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
 import { QrCodeDto } from './dto/qrCode.dto';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
-import { UploadService } from '../upload/upload.service';
-import { Response } from 'express';
 
 @ApiTags('工具模块')
 @Controller('utils')
 export class UtilsController {
-  constructor(
-    private readonly utilsService: UtilsService,
-    private readonly uploadService: UploadService,
-  ) {}
+  constructor(private readonly utilsService: UtilsService) {}
 
   @Get('/createIdCard/:sex')
   @ApiOperation({
@@ -39,37 +24,13 @@ export class UtilsController {
     summary: '生成qrCode',
   })
   async qrCode(@Body() qrCodeDto: QrCodeDto) {
-    const qrCodeBase64 = await this.utilsService.createQrCode(qrCodeDto);
-    const url = await this.uploadService.uploadToVercelBlob(
-      'qrCode.jpg',
-      qrCodeBase64,
-    );
-    return { path: url, name: 'qrCode.jpg' };
-  }
-
-  @Delete('/clearBlob/:url')
-  @ApiOperation({
-    summary: '清除上传文件',
-  })
-  @ApiParam({ name: 'url', description: '删除文件Url' })
-  deleteOneBlob(@Param('url') url: string) {
-    return this.utilsService.deleteOneBlob(url);
-  }
-
-  @Delete('/clearAllBlob')
-  @ApiOperation({
-    summary: '清除所有上传文件',
-  })
-  clearAllBlob() {
-    return this.utilsService.clearAllBlob();
-  }
-
-  @Get('/allBlob')
-  @ApiOperation({
-    summary: '获取所有上传文件列表',
-  })
-  getAllBlob() {
-    return this.utilsService.getAllBlob();
+    console.log(qrCodeDto);
+    // const qrCodeBase64 = await this.utilsService.createQrCode(qrCodeDto);
+    // const url = await this.uploadService.uploadToVercelBlob(
+    //   'qrCode.jpg',
+    //   qrCodeBase64,
+    // );
+    // return { path: url, name: 'qrCode.jpg' };
   }
 
   @Get('/allConfig')
