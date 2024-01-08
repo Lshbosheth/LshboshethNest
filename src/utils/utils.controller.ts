@@ -7,7 +7,6 @@ import {
   Post,
   Put,
   Query,
-  Options,
   Res,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
@@ -100,49 +99,4 @@ export class UtilsController {
     const editedConfig = await this.utilsService.updateConfig(updateConfigDto);
     return editedConfig;
   }
-
-  @Get('/wechatPush')
-  @ApiOperation({
-    summary: '微信小程序测试',
-  })
-  async wechatPush(@Query() query: any, @Res() res: Response) {
-    console.log(query);
-    const { signature, timestamp, nonce, echostr } = query;
-    const checkSignature = this.utilsService.checkSignature(signature, timestamp, nonce);
-    console.log(checkSignature)
-    if (checkSignature) {
-      res.send(echostr)
-    }else {
-      res.send('Invalid signature')
-    }
-  }
-
-  // @Post('/pushMessage')
-  // @ApiOperation({
-  //   summary: '推送微信消息',
-  // })
-  // async pushMessage(@Body() msgData: any) {
-  //   const msgPush = await this.utilsService.pushMsg(msgData);
-  //   return msgPush;
-  // }
-
-
-  @Get('/openID')
-  @ApiOperation({
-    summary: 'openID',
-  })
-  async openid(@Query('code') code: string) {
-    const openId = await this.utilsService.getOpenId(code);
-    return openId;
-  }
-
-  @Get('/pushWeatherMsg')
-  @ApiOperation({
-    summary: '推送天气信息',
-  })
-  async pushWeatherMsg() {
-    return await this.utilsService.pushWeatherMsg()
-  }
-
-
 }

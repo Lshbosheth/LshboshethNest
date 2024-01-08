@@ -10,6 +10,7 @@ import { UtilsModule } from './utils/utils.module';
 import { AuthModule } from './auth/auth.module';
 import { FileManageModule } from './file-manage/file-manage.module';
 import { QiniuModule } from './qiniu/qiniu.module';
+import { WechatModule } from './wechat/wechat.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { QiniuModule } from './qiniu/qiniu.module';
     AuthModule,
     FileManageModule,
     QiniuModule,
+    WechatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
