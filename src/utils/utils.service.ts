@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Config } from './entities/config.entity';
 import axios from 'axios';
+import process from 'process';
 
 @Injectable()
 export class UtilsService {
@@ -126,34 +127,32 @@ export class UtilsService {
     const token = 'NAna0218';
     const tmpArr = [token, timestamp, nonce].sort((a, b) => a.localeCompare(b));
     const tmpStr = tmpArr.join('');
-    const hashedStr = require('crypto').createHash('sha1').update(tmpStr).digest('hex');
+    const hashedStr = require('crypto')
+      .createHash('sha1')
+      .update(tmpStr)
+      .digest('hex');
     return hashedStr === signature;
   }
 
-  async pushMsg(msgData: any) {
-    const tempId = '9ODFxKcrCNDP7kLdgY8lRPtMpMEVCK9ihUuW6kWdnu0'
-    const openId = 'oq7pJ5fjlzxMwmWXpTkK8qfBx8mc' //myopenid
-    const token = await this.getWechatToken()
+  async pushMsg(tempId: string, msgData: any) {
+    const tianqi = 'FOhSugSZ11ebVdw0a89HDDHoZokg782SsH5I36Q70Rw';
+    const openId = 'oq7pJ5fjlzxMwmWXpTkK8qfBx8mc'; //myopenid
+    const token = await this.getWechatToken();
     const url = `https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=${token}`;
     try {
       const response = await axios.post(url, {
-        params: {
-          access_token: token,
-          template_id: tempId,
-          grant_type: 'authorization_code',
-          touser: openId,
-          data:  { "thing1": '123', time2: '222' },
-          miniprogram_state: 'formal',
-          lang: 'zh_CN'
-        }
+        access_token: token,
+        template_id: tempId,
+        grant_type: 'authorization_code',
+        touser: openId,
+        data: msgData,
+        miniprogram_state: 'trial',
+        lang: 'zh_CN',
       });
-      console.log(response.data);
-      if (response.data && response.data.access_token) {
-        return response.data
+      if (response.data) {
+        return response.data;
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 
   async getOpenId(code: string) {
@@ -167,10 +166,10 @@ export class UtilsService {
           grant_type: 'authorization_code',
           appid: appId,
           secret: appSecret,
-        }
+        },
       });
       if (response.data) {
-        return response.data.openid
+        return response.data.openid;
       }
     } catch (error) {
       console.error('Error updating WeChat access token:', error);
@@ -179,22 +178,46 @@ export class UtilsService {
 
   async getWechatToken() {
     const url = 'https://api.weixin.qq.com/cgi-bin/token';
-    const appId = 'wx8d1aa3c9bfb8be3a';
-    const appSecret = '745fcbcf462c3a99122e6f920879fdde';
     try {
       const response = await axios.get(url, {
         params: {
           grant_type: 'client_credential',
-          appid: appId,
-          secret: appSecret,
-        }
+          appid: process.env.APPID,
+          secret: process.env.APPSECRET,
+        },
       });
-      console.log(response);
       if (response.data && response.data.access_token) {
-        return response.data.access_token
+        return response.data.access_token;
       }
     } catch (error) {
       console.error('Error updating WeChat access token:', error);
     }
+  }
+
+  async pushWeatherMsg() {
+    const tempId = 'FOhSugSZ11ebVdw0a89HDEJ-kMKFp7DbCcPEgTNzv94';
+    const weatherUrl = 'http://t.weather.sojson.com/api/weather/city/101180101'
+    const oneUrl = 'https://api.xygeng.cn/one'
+    let weatherInfo = await axios.get(weatherUrl);
+    let oneInfo = await axios.get(oneUrl);
+    const nowWeather = weatherInfo.data.data.forecast[0]
+    const msgData = {
+      date1: {
+        value: dayjs().format('YYYY年MM月DD日'),
+      },
+      phrase3: {
+        value: nowWeather.type,
+      },
+      character_string14: {
+        value: nowWeather.low.split(' ')[1],
+      },
+      character_string15: {
+        value: nowWeather.high.split(' ')[1],
+      },
+      thing5: {
+        value: oneInfo.data.data.content,
+      },
+    }
+    return await this.pushMsg(tempId, msgData)
   }
 }

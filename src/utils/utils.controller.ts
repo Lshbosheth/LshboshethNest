@@ -117,14 +117,14 @@ export class UtilsController {
     }
   }
 
-  @Post('/pushMessage')
-  @ApiOperation({
-    summary: '推送微信消息',
-  })
-  async pushMessage(@Body() msgData: any) {
-    const msgPush = await this.utilsService.pushMsg(msgData);
-    return msgPush;
-  }
+  // @Post('/pushMessage')
+  // @ApiOperation({
+  //   summary: '推送微信消息',
+  // })
+  // async pushMessage(@Body() msgData: any) {
+  //   const msgPush = await this.utilsService.pushMsg(msgData);
+  //   return msgPush;
+  // }
 
 
   @Get('/openID')
@@ -134,6 +134,14 @@ export class UtilsController {
   async openid(@Query('code') code: string) {
     const openId = await this.utilsService.getOpenId(code);
     return openId;
+  }
+
+  @Get('/pushWeatherMsg')
+  @ApiOperation({
+    summary: '推送天气信息',
+  })
+  async pushWeatherMsg() {
+    return await this.utilsService.pushWeatherMsg()
   }
 
 
