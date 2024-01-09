@@ -159,8 +159,9 @@ export class FileManageService {
   }
 
   removeQiniuFile(key: string) {
+    const delKey = Buffer.from(key, 'base64').toString('utf-8');
     return new Promise((resolve, reject) => {
-      this.bucketManager.delete('lshbosheth', key, function (err, respBody) {
+      this.bucketManager.delete('lshbosheth', delKey, function (err, respBody) {
         if (err) {
           reject(err);
         } else {
