@@ -25,12 +25,8 @@ export class UtilsController {
   })
   async qrCode(@Body() qrCodeDto: QrCodeDto) {
     console.log(qrCodeDto);
-    // const qrCodeBase64 = await this.utilsService.createQrCode(qrCodeDto);
-    // const url = await this.uploadService.uploadToVercelBlob(
-    //   'qrCode.jpg',
-    //   qrCodeBase64,
-    // );
-    // return { path: url, name: 'qrCode.jpg' };
+    const url = await this.utilsService.createQrCode(qrCodeDto);
+    return { path: url, name: 'qrCode.jpg' };
   }
 
   @Get('/allConfig')

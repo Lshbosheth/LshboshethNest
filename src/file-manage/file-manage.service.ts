@@ -100,12 +100,37 @@ export class FileManageService {
   }
 
   getQiniuUploadToken() {
-    const options = {
-      scope: 'lshbosheth',
-      expires: 7200,
-    };
-    const putPolicy = new qiniu.rs.PutPolicy(options);
-    return putPolicy.uploadToken(this.mac);
+    return new Promise((resolve) => {
+      const options = {
+        scope: 'lshbosheth',
+        expires: 7200,
+      };
+      const putPolicy = new qiniu.rs.PutPolicy(options);
+      resolve(putPolicy.uploadToken(this.mac));
+    });
+  }
+
+  async uploadQiniuFile(fileName: string, fileData: any) {
+    const upToken: any = await this.getQiniuUploadToken();
+    const config = new qiniu.conf.Config();
+    config['zone'] = qiniu.zone.Zone_z1;
+    const formUploader = new qiniu.form_up.FormUploader(config);
+    const extra = new qiniu.form_up.PutExtra();
+    return new Promise((resolve) => {
+      formUploader.put(
+        upToken,
+        fileName,
+        fileData,
+        extra,
+        function (err, response) {
+          if (!err) {
+            resolve(response);
+          } else {
+            console.log(err);
+          }
+        },
+      );
+    });
   }
 
   findAllQiniuFile() {

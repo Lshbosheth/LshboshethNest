@@ -8,17 +8,27 @@ import * as QRCode from 'qrcode';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Config } from './entities/config.entity';
+import { FileManageService } from '../file-manage/file-manage.service';
 
 @Injectable()
 export class UtilsService {
-  constructor(@InjectRepository(Config) private config: Repository<Config>) {}
+  constructor(
+    @InjectRepository(Config) private config: Repository<Config>,
+    private fileManageService: FileManageService,
+  ) {}
   async createIdCard(sex: string) {
     return this.idNumber(sex);
   }
 
   async createQrCode(qrCodeDto: QrCodeDto) {
     try {
-      return await QRCode.toBuffer(qrCodeDto.text);
+      const qrCodeBase64 = await QRCode.toBuffer(qrCodeDto.text);
+      const url = await this.fileManageService.uploadQiniuFile(
+        'qrCode.jpg',
+        qrCodeBase64,
+      );
+      console.log(url);
+      return url;
     } catch (error) {
       throw new Error(`生成二维码失败: ${error.message}`);
     }
