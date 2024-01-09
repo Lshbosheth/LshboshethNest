@@ -7,7 +7,7 @@ import {
   Delete,
   Post,
   UseInterceptors,
-  UploadedFile,
+  UploadedFile, Req, Query,
 } from '@nestjs/common';
 import { FileManageService } from './file-manage.service';
 import { UpdateFileManageDto } from './dto/update-file-manage.dto';
@@ -21,6 +21,7 @@ import {
 import { CreateUploadDto } from './dto/create-upload.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { v4 as uuidv4 } from 'uuid';
+import { query } from 'express';
 
 @ApiTags('文件管理')
 @Controller('files')
@@ -95,8 +96,8 @@ export class FileManageController {
     summary: '查找七牛云对象存储中所有文件',
   })
   @Get('qiniuFiles')
-  findAllQiniuFile() {
-    return this.fileManageService.findAllQiniuFile();
+  findAllQiniuFile(@Query('prefix') prefix: string) {
+    return this.fileManageService.findAllQiniuFile(prefix || '');
   }
 
   @ApiOperation({

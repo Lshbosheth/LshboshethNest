@@ -133,20 +133,21 @@ export class FileManageService {
     });
   }
 
-  findAllQiniuFile() {
+  findAllQiniuFile(prefix: string) {
     return new Promise((resolve, reject) => {
       this.bucketManager.listPrefix(
         'lshbosheth',
-        null,
+        { prefix: prefix, delimiter: '/' },
         function (err, respBody, respInfo) {
           if (err) {
             reject(err);
           } else {
             if (respInfo.statusCode == 200) {
-              const items = respInfo.data.items;
-              const result = items.filter(
-                (e: { key: string }) => !e.key.split('/').includes('_log'),
-              );
+              // const items = respInfo.data.items;
+              // const result = items.filter(
+              //   (e: { key: string }) => !e.key.split('/').includes('_log'),
+              // );
+              const result = respInfo.data;
               resolve(result);
             } else {
               resolve(respBody.error);
