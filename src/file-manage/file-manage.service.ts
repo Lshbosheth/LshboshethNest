@@ -170,4 +170,37 @@ export class FileManageService {
       });
     });
   }
+
+  removeSomeQiniuFile(delBody: any) {
+    const deleteOperations = [];
+    if (delBody.names.length > 0) {
+      delBody.names.forEach((e: any) => {
+        deleteOperations.push(qiniu.rs.deleteOp('lshbosheth', e));
+      });
+      return new Promise((resolve, reject) => {
+        this.bucketManager.batch(
+          deleteOperations,
+          function (err, respBody, respInfo: any) {
+            if (err) {
+              reject(err);
+            } else {
+              if (respInfo.statusCode == 200) {
+                resolve('删除成功');
+              } else {
+                const errNameList = [];
+                respBody.forEach((e: any, i: any) => {
+                  if (e.code !== 200) {
+                    errNameList.push(delBody.names[i]);
+                  }
+                });
+                resolve(`没有找到要删除的文件!(${errNameList.join(',')})`);
+              }
+            }
+          },
+        );
+      });
+    } else {
+      return '未添加要删除的文件!';
+    }
+  }
 }

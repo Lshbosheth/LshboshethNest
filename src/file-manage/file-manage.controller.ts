@@ -7,7 +7,8 @@ import {
   Delete,
   Post,
   UseInterceptors,
-  UploadedFile, Req, Query,
+  UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { FileManageService } from './file-manage.service';
 import { UpdateFileManageDto } from './dto/update-file-manage.dto';
@@ -21,8 +22,7 @@ import {
 import { CreateUploadDto } from './dto/create-upload.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { v4 as uuidv4 } from 'uuid';
-import { query } from 'express';
-
+import { DeleteQiniuDto } from './dto/delete-qiniu.dto';
 @ApiTags('文件管理')
 @Controller('files')
 export class FileManageController {
@@ -106,6 +106,14 @@ export class FileManageController {
   @Delete('qiniuFiles/:key')
   removeQiniuFile(@Param('key') key: string) {
     return this.fileManageService.removeQiniuFile(key);
+  }
+
+  @ApiOperation({
+    summary: '删除七牛云对象存储中多个文件',
+  })
+  @Post('qiniuFiles/deleteSome')
+  removeSomeQiniuFile(@Body() delBody: DeleteQiniuDto) {
+    return this.fileManageService.removeSomeQiniuFile(delBody);
   }
 
   @ApiOperation({
