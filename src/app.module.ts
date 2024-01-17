@@ -9,6 +9,7 @@ import { UtilsModule } from './utils/utils.module';
 import { AuthModule } from './auth/auth.module';
 import { FileManageModule } from './file-manage/file-manage.module';
 import { WechatModule } from './wechat/wechat.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { WechatModule } from './wechat/wechat.module';
     AuthModule,
     FileManageModule,
     WechatModule,
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [AppService],
