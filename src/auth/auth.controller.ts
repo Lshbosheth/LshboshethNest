@@ -1,4 +1,12 @@
-import { Body, Controller, Post, UseGuards, Get, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  Get,
+  Req,
+  Session,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -14,7 +22,10 @@ export class AuthController {
   @ApiOperation({
     summary: '登录',
   })
-  login(@Body() AuthDto: CreateAuthDto) {
+  login(@Body() AuthDto: CreateAuthDto, @Session() session: any) {
+    if (session.captcha !== AuthDto.captcha) {
+      return '验证码错误';
+    }
     return this.authService.login(AuthDto);
   }
 

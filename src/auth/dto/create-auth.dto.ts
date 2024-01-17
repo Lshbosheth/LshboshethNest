@@ -14,4 +14,5 @@ export class CreateAuthDto {
   })
   password: string;
   refreshToken?: string;
+  captcha?: string;
 }

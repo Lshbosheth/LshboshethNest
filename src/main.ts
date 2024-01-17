@@ -6,6 +6,7 @@ import { TransformInterceptor } from './global/interceptor/transform/transform.i
 import { HttpExceptionFilter } from './global/filter/http-exception/http-exception.filter';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import compression from 'compression';
+import session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -17,6 +18,13 @@ async function bootstrap() {
     origin: '*',
   });
   app.use(compression());
+  app.use(
+    session({
+      secret: 'NAna-0218',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
   app.useStaticAssets('public');
   generateDocument(app);
   const port = +process.env.SERVICE_PORT;

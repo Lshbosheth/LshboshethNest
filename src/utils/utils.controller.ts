@@ -1,14 +1,26 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Response, Session } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
 import { QrCodeDto } from './dto/qrCode.dto';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
+import { CaptchaObj } from 'svg-captcha';
 
 @ApiTags('工具模块')
 @Controller('utils')
 export class UtilsController {
   constructor(private readonly utilsService: UtilsService) {}
+
+  @Get('/captcha')
+  @ApiOperation({
+    summary: '生成图形验证码',
+  })
+  async createCaptcha(@Response() res: any, @Session() session: any) {
+    const captcha: CaptchaObj = await this.utilsService.generateCaptcha();
+    session.captcha = captcha.text;
+    res.type('svg');
+    res.send(captcha.data);
+  }
 
   @Get('/createIdCard/:sex')
   @ApiOperation({
