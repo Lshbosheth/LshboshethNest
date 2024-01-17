@@ -32,7 +32,7 @@ export class AuthController {
     summary: '登出',
   })
   logout(@Req() req: Request) {
-    this.authService.logout(req.user['sub']);
+    return this.authService.logout(req.user['sub']);
   }
 
   @UseGuards(RefreshTokenGuard)
