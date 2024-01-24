@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Session } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import dayjs from 'dayjs';
 import { areas } from '../static/areas';
 import { QrCodeDto } from './dto/qrCode.dto';
@@ -10,7 +10,6 @@ import { Repository } from 'typeorm';
 import { Config } from './entities/config.entity';
 import { FileManageService } from '../file-manage/file-manage.service';
 import * as svgCaptcha from 'svg-captcha';
-import session from 'express-session';
 @Injectable()
 export class UtilsService {
   constructor(

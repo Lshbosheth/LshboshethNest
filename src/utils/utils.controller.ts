@@ -1,10 +1,21 @@
-import { Body, Controller, Get, Param, Post, Put, Response, Session } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Response,
+  Session,
+  Sse,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
 import { QrCodeDto } from './dto/qrCode.dto';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
 import { CaptchaObj } from 'svg-captcha';
+import { interval, Observable } from 'rxjs';
 
 @ApiTags('工具模块')
 @Controller('utils')
@@ -67,5 +78,14 @@ export class UtilsController {
     console.log(updateConfigDto);
     const editedConfig = await this.utilsService.updateConfig(updateConfigDto);
     return editedConfig;
+  }
+
+  @Sse('sse')
+  stream() {
+    return new Observable((observer) => {
+      interval(1000).subscribe(() => {
+        observer.next({ message: 'Hello World 2!' });
+      });
+    });
   }
 }
