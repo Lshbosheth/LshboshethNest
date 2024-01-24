@@ -81,6 +81,9 @@ export class UtilsController {
   }
 
   @Sse('sse')
+  @ApiOperation({
+    summary: '测试Stream',
+  })
   stream() {
     return new Observable((observer) => {
       interval(1000).subscribe(() => {
