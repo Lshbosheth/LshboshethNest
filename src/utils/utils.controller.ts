@@ -8,6 +8,7 @@ import {
   Response,
   Session,
   Sse,
+  Res, HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
@@ -15,7 +16,7 @@ import { QrCodeDto } from './dto/qrCode.dto';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
 import { CaptchaObj } from 'svg-captcha';
-import { interval, Observable } from 'rxjs';
+import { interval, map, Observable, Subject, takeUntil } from 'rxjs';
 
 @ApiTags('工具模块')
 @Controller('utils')
@@ -80,11 +81,52 @@ export class UtilsController {
     return editedConfig;
   }
 
+  @Post('sse')
+  @ApiOperation({
+    summary: '测试Stream/POST',
+  })
+  postStream(@Body() data: any, @Res() res: any) {
+    console.log(data);
+    // 创建一个Observable，每秒发出一条消息
+    const closeConnection$ = new Subject<void>();
+    const messageStream$ = interval(1000).pipe(
+      takeUntil(closeConnection$),
+      map(() => ({ message: 'Hello World 2!' })),
+    );
+
+    // 将响应体设置为流式传输，并开始写入数据
+    res.writeHead(HttpStatus.OK, {
+      'Content-Type': 'text/event-stream',
+      Connection: 'keep-alive',
+    });
+
+    // 订阅Observable并将其内容写入到HTTP响应体
+    messageStream$.subscribe(
+      (data) => {
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+        res.flush();
+      },
+      (error) => {
+        console.error(error);
+        res.end();
+      },
+      () => {
+        res.end();
+      },
+    );
+
+    setTimeout(() => {
+      closeConnection$.next();
+      closeConnection$.complete();
+    }, 10000);
+  }
+
   @Sse('sse')
   @ApiOperation({
-    summary: '测试Stream',
+    summary: '测试Stream/GET',
   })
-  stream() {
+  stream(@Body() data: any) {
+    console.log(data);
     return new Observable((observer) => {
       interval(1000).subscribe(() => {
         observer.next({ message: 'Hello World 2!' });
