@@ -7,9 +7,11 @@ import { User } from '../user/entities/user.entity';
 import { UserModule } from '../user/user.module';
 import AccessTokenStrategy from './strategies/accessToken.strategy';
 import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
+import { UtilsModule } from '../utils/utils.module';
 
 @Module({
   imports: [
+    UtilsModule,
     UserModule,
     TypeOrmModule.forFeature([User]),
     JwtModule.register({}),

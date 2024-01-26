@@ -12,6 +12,7 @@ import { FileManageService } from '../file-manage/file-manage.service';
 import * as svgCaptcha from 'svg-captcha';
 @Injectable()
 export class UtilsService {
+  captcha: string = '';
   constructor(
     @InjectRepository(Config) private config: Repository<Config>,
     private fileManageService: FileManageService,

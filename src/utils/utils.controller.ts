@@ -6,9 +6,9 @@ import {
   Post,
   Put,
   Response,
-  Session,
   Sse,
-  Res, HttpStatus,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
@@ -27,9 +27,9 @@ export class UtilsController {
   @ApiOperation({
     summary: '生成图形验证码',
   })
-  async createCaptcha(@Response() res: any, @Session() session: any) {
+  async createCaptcha(@Response() res: any) {
     const captcha: CaptchaObj = await this.utilsService.generateCaptcha();
-    session.captcha = captcha.text;
+    this.utilsService.captcha = captcha.text;
     res.type('svg');
     res.send(captcha.data);
   }

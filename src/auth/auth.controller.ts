@@ -13,17 +13,21 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RefreshTokenGuard } from '../common/guards/refreshToken.guard';
 import { AccessTokenGuard } from '../common/guards/accessToken.guard';
 import { Request } from 'express';
+import { UtilsService } from '../utils/utils.service';
 
 @ApiTags('登录鉴权')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly utilsService: UtilsService,
+  ) {}
   @Post('/login')
   @ApiOperation({
     summary: '登录',
   })
-  login(@Body() AuthDto: CreateAuthDto, @Session() session: any) {
-    if (session.captcha !== AuthDto.captcha) {
+  login(@Body() AuthDto: CreateAuthDto) {
+    if (this.utilsService.captcha !== AuthDto.captcha) {
       return '验证码错误';
     }
     return this.authService.login(AuthDto);
