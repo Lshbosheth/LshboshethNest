@@ -17,6 +17,8 @@ import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
 import { CaptchaObj } from 'svg-captcha';
 import { interval, map, Observable, Subject, takeUntil } from 'rxjs';
+import { EmailDto } from './dto/email.dto';
+import { emailTemplate } from '../static/emailTemplate';
 
 @ApiTags('工具模块')
 @Controller('utils')
@@ -131,6 +133,18 @@ export class UtilsController {
       interval(1000).subscribe(() => {
         observer.next({ message: 'Hello World 2!' });
       });
+    });
+  }
+
+  @Post('sendEmail')
+  @ApiOperation({
+    summary: '发送邮件',
+  })
+  sendEmail(@Body() emailBody: EmailDto) {
+    return this.utilsService.sendEmail({
+      to: emailBody.destinationEmail || '',
+      subject: emailBody.subject || '',
+      html: emailBody.htmlCode ? emailTemplate[emailBody.htmlCode] : '',
     });
   }
 }

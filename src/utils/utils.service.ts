@@ -10,13 +10,40 @@ import { Repository } from 'typeorm';
 import { Config } from './entities/config.entity';
 import { FileManageService } from '../file-manage/file-manage.service';
 import * as svgCaptcha from 'svg-captcha';
+import { createTransport, Transporter } from 'nodemailer';
+
+
 @Injectable()
 export class UtilsService {
   captcha: string = '';
+  transporter: Transporter;
   constructor(
     @InjectRepository(Config) private config: Repository<Config>,
     private fileManageService: FileManageService,
-  ) {}
+  ) {
+    this.transporter = createTransport({
+      host: 'smtp.qq.com', // smtp服务的域名
+      port: 587, // smtp服务的端口
+      secure: false,
+      auth: {
+        user: 'lshbosheth@qq.com', // 你的邮箱地址
+        pass: 'mrgooyabtdcibdjd' // 你的授权码
+      }
+    });
+  }
+
+  async sendEmail({ to, subject, html }) {
+    await this.transporter.sendMail({
+      from: {
+        name: 'lshbosheth',
+        address: 'lshbosheth@qq.com' // 你的邮箱地址
+      },
+      to,
+      subject,
+      html
+    });
+  }
+
   async createIdCard(sex: string) {
     return this.idNumber(sex);
   }
