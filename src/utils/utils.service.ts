@@ -12,7 +12,6 @@ import { FileManageService } from '../file-manage/file-manage.service';
 import * as svgCaptcha from 'svg-captcha';
 import { createTransport, Transporter } from 'nodemailer';
 
-
 @Injectable()
 export class UtilsService {
   captcha: string = '';
@@ -27,8 +26,8 @@ export class UtilsService {
       secure: false,
       auth: {
         user: 'lshbosheth@qq.com', // 你的邮箱地址
-        pass: 'mrgooyabtdcibdjd' // 你的授权码
-      }
+        pass: 'mrgooyabtdcibdjd', // 你的授权码
+      },
     });
   }
 
@@ -36,11 +35,11 @@ export class UtilsService {
     await this.transporter.sendMail({
       from: {
         name: 'lshbosheth',
-        address: 'lshbosheth@qq.com' // 你的邮箱地址
+        address: 'lshbosheth@qq.com', // 你的邮箱地址
       },
       to,
       subject,
-      html
+      html,
     });
   }
 

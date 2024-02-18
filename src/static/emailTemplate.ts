@@ -1,5 +1,5 @@
 export const emailTemplate = {
-  '01' : `<!doctype html>
+  '01': `<!doctype html>
     <html ⚡4email>
       <head>
         <meta charset="utf-8">
@@ -12,5 +12,5 @@ export const emailTemplate = {
         <p>GIF (requires "amp-anim" script in header):<br/>
           <img src="https://cldup.com/D72zpdwI-i.gif" width="500" height="350"/></p>
       </body>
-    </html>`
-}
+    </html>`,
+};
