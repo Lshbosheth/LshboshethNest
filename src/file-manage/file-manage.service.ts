@@ -171,6 +171,25 @@ export class FileManageService {
     });
   }
 
+  editQiniuFileName(editBody: any) {
+    return new Promise((resolve, reject) => {
+      this.bucketManager.move(
+        'lshbosheth',
+        editBody.srcKey,
+        'lshbosheth',
+        editBody.destKey,
+        null,
+        function (err, respBody) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(respBody);
+          }
+        },
+      );
+    });
+  }
+
   removeSomeQiniuFile(delBody: any) {
     const deleteOperations = [];
     if (delBody.names.length > 0) {

@@ -23,6 +23,7 @@ import { CreateUploadDto } from './dto/create-upload.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { v4 as uuidv4 } from 'uuid';
 import { DeleteQiniuDto } from './dto/delete-qiniu.dto';
+import { EditQiniuDto } from './dto/edit-qiniu.dto';
 @ApiTags('文件管理')
 @Controller('files')
 export class FileManageController {
@@ -106,6 +107,14 @@ export class FileManageController {
   @Delete('qiniuFiles/:key')
   removeQiniuFile(@Param('key') key: string) {
     return this.fileManageService.removeQiniuFile(key);
+  }
+
+  @ApiOperation({
+    summary: '编辑七牛云对象存储中单个文件名',
+  })
+  @Post('qiniuFiles/editFileName')
+  editQiniuFileName(@Body() editBody: EditQiniuDto) {
+    return this.fileManageService.editQiniuFileName(editBody);
   }
 
   @ApiOperation({
