@@ -110,4 +110,65 @@ export class WechatService {
     };
     return await this.pushMsg(tempId, msgData, openId);
   }
+
+  /**
+   *获取微信AccessToken
+   */
+  async getTestAccessToken() {
+    const url = 'https://api.weixin.qq.com/cgi-bin/token';
+    try {
+      const response = await axios.get(url, {
+        params: {
+          grant_type: 'client_credential',
+          appid: process.env.TEST_APPID,
+          secret: process.env.TEST_APPSECRET,
+        },
+      });
+      if (response.data && response.data.access_token) {
+        return response.data.access_token;
+      }
+    } catch (error) {
+      console.error('Error updating WeChat access token:', error);
+    }
+  }
+
+  async pushWechatTestMsg() {
+    const tempId = 'xuDhfpKsCBhgJgCjLMXQjl0MFVWPAU2Dl66PlJ8gYiQ';
+    const msgData = {
+      first: {
+        value: '提醒',
+        color: '#173177',
+      },
+      keyword1: {
+        value: '提醒',
+        color: '#173177',
+      },
+      keyword2: {
+        value: '提醒',
+        color: '#173177',
+      },
+      remark: {
+        value: '提醒',
+        color: '#173177',
+      },
+    };
+    return await this.pushTestMsg(tempId, msgData, '');
+  }
+
+  async pushTestMsg(tempId: string, msgData: any, openId = '') {
+    const token = await this.getTestAccessToken();
+    const url = `https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=${token}`;
+    try {
+      const response = await axios.post(url, {
+        template_id: tempId,
+        touser: openId || 'oPmaV6gjzA90kYhqztEiKZ-vU9a8',
+        data: msgData,
+        lang: 'zh_CN',
+        topcolor: '#FF0000',
+      });
+      if (response.data) {
+        return response.data;
+      }
+    } catch (error) {}
+  }
 }

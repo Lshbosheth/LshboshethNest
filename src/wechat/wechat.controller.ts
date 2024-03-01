@@ -70,4 +70,12 @@ export class WechatController {
       res.send('Invalid signature');
     }
   }
+
+  @Get('/pushWechatTestMsg')
+  @ApiOperation({
+    summary: '推送测试公众号消息',
+  })
+  async pushWechatTestMsg() {
+    return await this.wechatService.pushWechatTestMsg();
+  }
 }
