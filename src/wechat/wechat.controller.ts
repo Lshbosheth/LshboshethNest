@@ -51,4 +51,23 @@ export class WechatController {
   async pushWeatherMsg() {
     return await this.wechatService.pushWeatherMsg();
   }
+
+  @Get('/wechatTestVerify')
+  @ApiOperation({
+    summary: '微信测试公众号',
+  })
+  async wechatTestVerify(@Query() query: any, @Res() res: Response) {
+    console.log(query);
+    const { signature, timestamp, nonce, echostr } = query;
+    const checkSignature = this.wechatService.checkSignature(
+      signature,
+      timestamp,
+      nonce,
+    );
+    if (checkSignature) {
+      res.send(echostr);
+    } else {
+      res.send('Invalid signature');
+    }
+  }
 }

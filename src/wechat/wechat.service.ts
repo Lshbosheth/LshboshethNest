@@ -81,7 +81,7 @@ export class WechatService {
   }
 
   async pushSomeWeatherMsg(openId: string) {
-    await this.pushWeatherMsg(openId)
+    await this.pushWeatherMsg(openId);
   }
 
   async pushWeatherMsg(openId = '') {
