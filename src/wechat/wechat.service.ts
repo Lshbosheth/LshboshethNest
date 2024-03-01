@@ -61,8 +61,7 @@ export class WechatService {
    * @param tempId
    * @param msgData
    */
-  async pushMsg(tempId: string, msgData: any) {
-    const openId = 'oq7pJ5fjlzxMwmWXpTkK8qfBx8mc'; //myopenid
+  async pushMsg(tempId: string, msgData: any, openId = '') {
     const token = await this.getAccessToken();
     const url = `https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=${token}`;
     try {
@@ -70,7 +69,7 @@ export class WechatService {
         access_token: token,
         template_id: tempId,
         grant_type: 'authorization_code',
-        touser: openId,
+        touser: openId || 'oq7pJ5fjlzxMwmWXpTkK8qfBx8mc',
         data: msgData,
         miniprogram_state: 'trial',
         lang: 'zh_CN',
@@ -81,7 +80,11 @@ export class WechatService {
     } catch (error) {}
   }
 
-  async pushWeatherMsg() {
+  async pushSomeWeatherMsg(openId: string) {
+    await this.pushWeatherMsg(openId)
+  }
+
+  async pushWeatherMsg(openId = '') {
     const tempId = 'FOhSugSZ11ebVdw0a89HDEJ-kMKFp7DbCcPEgTNzv94';
     const weatherUrl = 'http://t.weather.sojson.com/api/weather/city/101180101';
     const oneUrl = 'https://api.xygeng.cn/one';
@@ -105,6 +108,6 @@ export class WechatService {
         value: oneInfo.data.data.content,
       },
     };
-    return await this.pushMsg(tempId, msgData);
+    return await this.pushMsg(tempId, msgData, openId);
   }
 }

@@ -36,6 +36,14 @@ export class WechatController {
     return openId;
   }
 
+  @Get('/pushWeatherMsgByOpenId')
+  @ApiOperation({
+    summary: '自定义OpenId推送天气信息',
+  })
+  async pushSomeWeatherMsg(@Query('openId') openId: string) {
+    return await this.wechatService.pushSomeWeatherMsg(openId);
+  }
+
   @Get('/pushWeatherMsg')
   @ApiOperation({
     summary: '推送天气信息',
