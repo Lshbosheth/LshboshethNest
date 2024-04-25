@@ -104,43 +104,31 @@ export class UtilsService {
     return checksumMap[remainder];
   }
 
-  async getAllConfigs(): Promise<{ [key: string]: string }> {
+  async getAllConfigs(): Promise<Config[]> {
     const configs = await this.config.find();
-    const result = {};
-    configs.forEach((config) => {
-      result[config.configName] = config.configValue;
-    });
-
-    return result;
+    return configs;
   }
 
   async createConfig(createConfigDto: CreateConfigDto) {
-    const config = new Config();
-    config.configName = createConfigDto.configName;
-    config.configValue = createConfigDto.configValue;
-    config.description = createConfigDto.description;
+    const config = this.createConfigEntity(createConfigDto)
     return await this.config.save(config);
   }
 
   async updateConfig(updateConfigDto: UpdateConfigDto) {
-    const { configName, configValue } = updateConfigDto;
-
-    const existingConfig = await this.config.findOne({ where: { configName } });
-
-    if (!existingConfig) {
-      throw new NotFoundException(`Config with name ${configName} not found`);
-    }
-
-    // 更新配置项数据
-    if (configValue !== undefined) {
-      existingConfig.configValue = configValue;
-    }
-
-    const savedConfig = await this.config.save(existingConfig);
-    return savedConfig;
+    const { infoList } = updateConfigDto;
+    await this.config.clear()
+    const configEntities = infoList.map(info => this.createConfigEntity(info));
+    await this.config.save(configEntities);
   }
 
   async generateCaptcha() {
     return svgCaptcha.create();
+  }
+
+  private createConfigEntity(info: CreateConfigDto): Config {
+    const config = new Config();
+    config.configName = info.configName;
+    config.configSort = info.configSort;
+    return config;
   }
 }

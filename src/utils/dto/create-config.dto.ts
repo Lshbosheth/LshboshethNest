@@ -8,13 +8,23 @@ export class CreateConfigDto {
   })
   configName: string;
   @ApiProperty({
-    example: 'configValue',
-    description: '配置值',
+    example: 'configSort',
+    description: '配置顺序',
+    required: false
   })
-  configValue?: string;
+  configSort?: string;
+
+  @ApiProperty({
+    example: 'configType',
+    description: '配置类型',
+    required: false
+  })
+  configType?: string;
+
   @ApiProperty({
     example: 'xxx',
     description: '描述',
+    required: false
   })
   description?: string;
 }

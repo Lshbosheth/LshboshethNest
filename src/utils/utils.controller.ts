@@ -73,12 +73,11 @@ export class UtilsController {
     return createdConfig;
   }
 
-  @Put('/updateConfig')
+  @Post('/updateConfig')
   @ApiOperation({
     summary: '更新配置项',
   })
   async updateConfig(@Body() updateConfigDto: UpdateConfigDto) {
-    console.log(updateConfigDto);
     const editedConfig = await this.utilsService.updateConfig(updateConfigDto);
     return editedConfig;
   }

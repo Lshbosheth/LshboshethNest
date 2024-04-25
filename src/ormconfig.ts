@@ -18,7 +18,7 @@ const MySqlLocalConfig: TypeOrmModuleOptions = {
   host: 'localhost',
   port: 3306,
   username: 'root',
-  password: '123456',
+  password: 'NAna-0218',
   database: 'nesttest',
   synchronize: true,
   retryDelay: 500,

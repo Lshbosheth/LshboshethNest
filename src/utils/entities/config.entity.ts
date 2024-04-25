@@ -8,8 +8,11 @@ export class Config {
   @Column({ unique: true, nullable: false })
   configName: string;
 
-  @Column({ nullable: true })
-  configValue: string;
+  @Column({ nullable: true, type: 'varchar' })
+  configType: string;
+
+  @Column({ nullable: true, type: 'varchar' })
+  configSort: string | number;
 
   @Column({ nullable: true })
   description: string;

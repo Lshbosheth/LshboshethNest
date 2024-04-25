@@ -1,8 +1,8 @@
 // update-config.dto.ts
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UpdateConfigDto {
+export class InfoItem {
   @IsNotEmpty({ message: '配置名不能为空' })
   @IsString()
   @ApiProperty({
@@ -11,11 +11,27 @@ export class UpdateConfigDto {
   })
   configName: string;
 
-  @IsNotEmpty({ message: '配置值不能为空' })
-  @IsString()
   @ApiProperty({
-    example: 'newValue',
-    description: '配置值',
+    example: '1',
+    description: '配置顺序',
+    required: false
   })
-  configValue: string;
+  configSort?: string;
+
+  @ApiProperty({
+    example: 'xxx',
+    description: '描述',
+    required: false
+  })
+  description?: string;
+}
+
+export class UpdateConfigDto {
+  @IsArray()
+  @IsNotEmpty({message: '配置列表不能为空'})
+  @ApiProperty({
+    type: [InfoItem],
+    description: '配置列表'
+  })
+  infoList: InfoItem[]
 }
