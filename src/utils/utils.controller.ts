@@ -104,7 +104,7 @@ export class UtilsController {
     // 订阅Observable并将其内容写入到HTTP响应体
     messageStream$.subscribe(
       (data) => {
-        res.write(`data: ${JSON.stringify(data)}\n\n`);
+        res.write(`event:message\n data: ${JSON.stringify(data)}\n\n`);
         res.flush();
       },
       (error) => {
