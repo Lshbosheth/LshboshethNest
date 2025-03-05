@@ -2,13 +2,11 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   Param,
   Post,
-  Put,
   Response,
   Sse,
-  Res,
-  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
@@ -16,9 +14,11 @@ import { QrCodeDto } from './dto/qrCode.dto';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
 import { CaptchaObj } from 'svg-captcha';
-import { interval, map, Observable, Subject, takeUntil } from 'rxjs';
+import { interval, Observable, Subject, takeUntil } from 'rxjs';
 import { EmailDto } from './dto/email.dto';
+import { sseDto } from './dto/sseDto.dto';
 import { emailTemplate } from '../static/emailTemplate';
+import OpenAI from 'openai';
 
 @ApiTags('工具模块')
 @Controller('utils')
@@ -83,6 +83,7 @@ export class UtilsController {
   }
 
   @Post('sse')
+  @Sse('sse')
   @ApiOperation({
     summary: '测试Stream/POST',
   })
@@ -100,7 +101,7 @@ export class UtilsController {
     summary: '测试Stream/GET',
   })
   stream(@Body() data: any) {
-    console.log(data);
+    console.log(data, '测试Stream/GET');
     return new Observable((observer) => {
       interval(1000).subscribe(() => {
         observer.next({ message: 'Hello World 2!' });
@@ -118,5 +119,59 @@ export class UtilsController {
       subject: emailBody.subject || '',
       html: emailBody.htmlCode ? emailTemplate[emailBody.htmlCode] : '',
     });
+  }
+
+  @Sse('testDeepSeek')
+  @ApiOperation({
+    summary: 'deepSeek',
+  })
+  testDeepSeek() {
+    return this.utilsService.testDeepSeek();
+  }
+
+  @Post('postDeepSeek')
+  @Sse()
+  @ApiOperation({
+    summary: '测试postDeepSeek',
+  })
+  async postDeepSeek(@Body() postData: sseDto) {
+    console.log(postData);
+    const client = new OpenAI({
+      apiKey: process.env.DASHSCOPE_API_KEY,
+      baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+    });
+    try {
+      const stream = await client.chat.completions.create({
+        model: 'deepseek-r1',
+        messages: [{ role: 'user', content: postData.question }],
+        stream: true,
+      });
+      let reasoningContent = '';
+      let answerContent = '';
+      return new Observable((observer) => {
+        (async () => {
+          for await (const chunk of stream) {
+            const delta = chunk.choices[0]?.delta;
+            if (
+              delta &&
+              'reasoning_content' in delta &&
+              delta.reasoning_content
+            ) {
+              reasoningContent += delta.reasoning_content;
+              observer.next({ reasoning: delta.reasoning_content });
+            }
+            if (delta && 'content' in delta && delta.content) {
+              answerContent += delta.content;
+              observer.next({ content: delta.content });
+            }
+          }
+          console.log(`\n完整思考过程：${reasoningContent}`);
+          console.log(`完整的回复：${answerContent}`);
+          observer.complete();
+        })();
+      });
+    } catch (error) {
+      console.error('发生错误:', error);
+    }
   }
 }

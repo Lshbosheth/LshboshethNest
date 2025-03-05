@@ -14,24 +14,24 @@ export class InfoItem {
   @ApiProperty({
     example: '1',
     description: '配置顺序',
-    required: false
+    required: false,
   })
   configSort?: string;
 
   @ApiProperty({
     example: 'xxx',
     description: '描述',
-    required: false
+    required: false,
   })
   description?: string;
 }
 
 export class UpdateConfigDto {
   @IsArray()
-  @IsNotEmpty({message: '配置列表不能为空'})
+  @IsNotEmpty({ message: '配置列表不能为空' })
   @ApiProperty({
     type: [InfoItem],
-    description: '配置列表'
+    description: '配置列表',
   })
-  infoList: InfoItem[]
+  infoList: InfoItem[];
 }

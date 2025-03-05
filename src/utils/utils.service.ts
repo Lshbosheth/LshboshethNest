@@ -11,7 +11,8 @@ import { Config } from './entities/config.entity';
 import { FileManageService } from '../file-manage/file-manage.service';
 import * as svgCaptcha from 'svg-captcha';
 import { createTransport, Transporter } from 'nodemailer';
-
+import OpenAI from 'openai';
+import { interval, Observable } from 'rxjs';
 @Injectable()
 export class UtilsService {
   captcha: string = '';
@@ -110,14 +111,16 @@ export class UtilsService {
   }
 
   async createConfig(createConfigDto: CreateConfigDto) {
-    const config = this.createConfigEntity(createConfigDto)
+    const config = this.createConfigEntity(createConfigDto);
     return await this.config.save(config);
   }
 
   async updateConfig(updateConfigDto: UpdateConfigDto) {
     const { infoList } = updateConfigDto;
-    await this.config.clear()
-    const configEntities = infoList.map(info => this.createConfigEntity(info));
+    await this.config.clear();
+    const configEntities = infoList.map((info) =>
+      this.createConfigEntity(info),
+    );
     await this.config.save(configEntities);
   }
 
@@ -130,5 +133,46 @@ export class UtilsService {
     config.configName = info.configName;
     config.configSort = info.configSort;
     return config;
+  }
+
+  async testDeepSeek() {
+    const client = new OpenAI({
+      apiKey: process.env.DASHSCOPE_API_KEY,
+      baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+    });
+
+    try {
+      const stream = await client.chat.completions.create({
+        model: 'qwen-plus-latest',
+        messages: [{ role: 'user', content: '9.9和9.11谁大' }],
+        stream: true,
+      });
+      let reasoningContent = '';
+      let answerContent = '';
+      return new Observable((observer) => {
+        (async () => {
+          for await (const chunk of stream) {
+            const delta = chunk.choices[0]?.delta;
+            if (
+              delta &&
+              'reasoning_content' in delta &&
+              delta.reasoning_content
+            ) {
+              reasoningContent += delta.reasoning_content;
+              observer.next({ reasoning: delta.reasoning_content });
+            }
+            if (delta && 'content' in delta && delta.content) {
+              answerContent += delta.content;
+              observer.next({ content: delta.content });
+            }
+          }
+          console.log(`\n完整思考过程：${reasoningContent}`);
+          console.log(`完整的回复：${answerContent}`);
+          observer.complete();
+        })();
+      });
+    } catch (error) {
+      console.error('发生错误:', error);
+    }
   }
 }

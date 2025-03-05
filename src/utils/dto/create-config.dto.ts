@@ -10,21 +10,21 @@ export class CreateConfigDto {
   @ApiProperty({
     example: 'configSort',
     description: '配置顺序',
-    required: false
+    required: false,
   })
   configSort?: string;
 
   @ApiProperty({
     example: 'configType',
     description: '配置类型',
-    required: false
+    required: false,
   })
   configType?: string;
 
   @ApiProperty({
     example: 'xxx',
     description: '描述',
-    required: false
+    required: false,
   })
   description?: string;
 }
