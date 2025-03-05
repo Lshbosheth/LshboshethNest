@@ -32,6 +32,8 @@ jobs:
             ./* => /home/lshboshethNest
        last_ssh: |
         cd /home/lshboshethNest
+        which node
+        echo $PATH | grep "node"
         node -v
         npm -v
         sudo npm i
