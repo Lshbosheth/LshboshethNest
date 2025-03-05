@@ -10,19 +10,6 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-
-      - name: Build
-        run: |
-          npm ci
-          npm run build
-          # 删除需要过滤的文件（2025年验证有效）
-          rm -f dist/tsconfig.build.tsbuildinfo
-
       - name: Deploy 🚀
         uses: cross-the-world/scp-pipeline@master
         env:
@@ -34,11 +21,8 @@ jobs:
           connect_timeout: 30s
           local: 'dist/*'
           remote: /home/lshboshethNest
-          # 添加过滤参数（2025年最新语法）
-          switches: '-avz --exclude=tsconfig.build.tsbuildinfo'
           last_ssh: |
             cd /home/lshboshethNest
-            # 增加依赖安装步骤
-            npm install --only=prod --no-audit --prefer-offline
+            npm install
             cd src
-            pm2 start main.js --name lshboshethNest
+            pm2 start main.ts --name lshboshethNest
