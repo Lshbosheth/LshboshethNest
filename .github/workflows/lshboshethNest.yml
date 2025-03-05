@@ -1,38 +1,37 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
 name: lshboshethNest CI
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-22.04  # 使用最新的LTS版本
-    
+  build:
+
+    runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout 🛎️
-      uses: actions/checkout@v4
-      
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '22' # 或者指定具体的版本号，如 '22.x'
-
-    - name: Install dependencies
-      run: npm ci # 严格依赖锁定（优于 npm install）
-
+    - name: Checkout # 定义 step 的名字，方便作日志排查
+      uses: actions/checkout@v3
     - name: Deploy 🚀
       uses: cross-the-world/ssh-scp-ssh-pipelines@latest
       env:
         WELCOME: "ssh scp ssh pipelines"
         LASTSSH: "Doing something after copying"
       with:
-        host: ${{ secrets.DR_HOST }}
-        user: ${{ secrets.DR_USER }}
-        pass: ${{ secrets.DR_PASS }}
-        connect_timeout: 10s
-        first_ssh: |
-          rm -rf /home/lshboshethNest
-        scp: |
-          ./* => /home/lshboshethNest
-        last_ssh: |
-          cd /home/lshboshethNest
+       host: ${{ secrets.DR_HOST }}
+       user: ${{ secrets.DR_USER }}
+       pass: ${{ secrets.DR_PASS }}
+       connect_timeout: 10s
+       first_ssh: |
+        rm -rf /home/lshboshethNest
+       scp: |
+            ./* => /home/lshboshethNest
+       last_ssh: |
+        cd /home/lshboshethNest
+        pwd
+        source ~/.bashrc   # 强制加载用户环境
+        which node
