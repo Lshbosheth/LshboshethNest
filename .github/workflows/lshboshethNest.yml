@@ -33,3 +33,4 @@ jobs:
        last_ssh: |
         cd /home/lshboshethNest
         pwd
+        which node
