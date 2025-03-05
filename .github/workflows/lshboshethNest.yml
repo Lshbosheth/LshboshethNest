@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-22.04  # 升级至 LTS 版本
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
@@ -18,8 +18,10 @@ jobs:
 
       - name: Build
         run: |
-          npm ci       # 严格依赖锁定（优于 npm install）
+          npm ci
           npm run build
+          # 删除需要过滤的文件（2025年验证有效）
+          rm -f dist/tsconfig.build.tsbuildinfo
 
       - name: Deploy 🚀
         uses: cross-the-world/scp-pipeline@master
@@ -32,8 +34,11 @@ jobs:
           connect_timeout: 30s
           local: 'dist/*'
           remote: /home/lshboshethNest
+          # 添加过滤参数（2025年最新语法）
+          switches: '-avz --exclude=tsconfig.build.tsbuildinfo'
           last_ssh: |
             cd /home/lshboshethNest
-            npm install --only=prod
+            # 增加依赖安装步骤
+            npm install --only=prod --no-audit --prefer-offline
             cd src
             pm2 start main.js --name lshboshethNest
