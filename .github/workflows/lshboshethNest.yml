@@ -32,6 +32,6 @@ jobs:
             ./* => /home/lshboshethNest
        last_ssh: |
         cd /home/lshboshethNest
-        npm i
+        sudo npm i
         cd src
         pm2 reload main.ts
