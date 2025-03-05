@@ -1,0 +1,37 @@
+name: lshboshethNest CI
+on: 
+  push: 
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04  # 升级至 LTS 版本
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+      - name: Build
+        run: |
+          npm ci       # 严格依赖锁定（优于 npm install）
+          npm run build
+
+      - name: Deploy 🚀
+        uses: cross-the-world/scp-pipeline@v1
+        env:
+          WELCOME: "🚀 Deploying..."
+        with:
+          host: ${{ secrets.DR_HOST }}
+          user: ${{ secrets.DR_USER }}
+          pass: ${{ secrets.DR_PASS }}
+          connect_timeout: 30s
+          local: 'dist/*'
+          remote: /home/lshboshethNest
+          last_ssh: |
+            cd /home/lshboshethNest/src
+            pm2 reload main --update-env || pm2 start main.js --name lshboshethNest
