@@ -22,7 +22,7 @@ jobs:
           npm run build
 
       - name: Deploy 🚀
-        uses: cross-the-world/scp-pipeline@v1
+        uses: cross-the-world/scp-pipeline@master
         env:
           WELCOME: "🚀 Deploying..."
         with:
