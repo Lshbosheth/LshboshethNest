@@ -32,11 +32,4 @@ jobs:
             ./* => /home/lshboshethNest
        last_ssh: |
         cd /home/lshboshethNest
-        which node
         pwd
-        echo $PATH | grep "node"
-        node -v
-        npm -v
-        sudo npm i
-        cd src
-        pm2 reload main.ts
