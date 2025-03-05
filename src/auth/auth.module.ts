@@ -8,13 +8,20 @@ import { UserModule } from '../user/user.module';
 import AccessTokenStrategy from './strategies/accessToken.strategy';
 import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
 import { UtilsModule } from '../utils/utils.module';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     UtilsModule,
     UserModule,
     TypeOrmModule.forFeature([User]),
-    JwtModule.register({}),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_ACCESS_SECRET'),
+        signOptions: { expiresIn: '60s' },
+      }),
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
