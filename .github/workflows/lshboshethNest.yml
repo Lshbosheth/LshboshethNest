@@ -32,7 +32,6 @@ jobs:
             ./* => /home/lshboshethNest
        last_ssh: |
         cd /home/lshboshethNest
-        pwd
         source ~/.bashrc   # 强制加载用户环境
+        sudo su
         npm i
-        which node
