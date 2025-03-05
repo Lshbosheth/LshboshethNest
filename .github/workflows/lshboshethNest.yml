@@ -34,4 +34,5 @@ jobs:
         cd /home/lshboshethNest
         pwd
         source ~/.bashrc   # 强制加载用户环境
+        npm i
         which node
