@@ -31,7 +31,10 @@ jobs:
           pass: ${{ secrets.DR_PASS }}
           connect_timeout: 30s
           local: 'dist/*'
+          exclude: '**/*.tsbuildinfo' # 排除 .tsbuildinfo 文件
           remote: /home/lshboshethNest
           last_ssh: |
-            cd /home/lshboshethNest/src
-            pm2 reload main --update-env || pm2 start main.js --name lshboshethNest
+            cd /home/lshboshethNest
+            npm install --only=prod
+            cd src
+            pm2 start main.js --name lshboshethNest
