@@ -33,4 +33,4 @@ jobs:
        last_ssh: |
         cd /home/lshboshethNest
         source ~/.bashrc   # 强制加载用户环境
-        sudo -E npm i
+        npm i
