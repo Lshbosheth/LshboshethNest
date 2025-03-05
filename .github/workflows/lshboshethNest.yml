@@ -31,7 +31,6 @@ jobs:
           pass: ${{ secrets.DR_PASS }}
           connect_timeout: 30s
           local: 'dist/*'
-          exclude: '**/*.tsbuildinfo' # 排除 .tsbuildinfo 文件
           remote: /home/lshboshethNest
           last_ssh: |
             cd /home/lshboshethNest
