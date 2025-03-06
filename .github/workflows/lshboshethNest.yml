@@ -32,5 +32,6 @@ jobs:
             ./* => /home/lshboshethNest
        last_ssh: |
          cd /home/lshboshethNest && pwd
+         echo $PATH
          source ~/.bashrc && echo "Bash environment sourced"
          npm i --verbose && echo "npm install completed"
