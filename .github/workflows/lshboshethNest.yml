@@ -32,4 +32,7 @@ jobs:
             ./* => /home/lshboshethNest
        last_ssh: |
          cd /home/lshboshethNest
+         pwd
+         cd /etc/nvm
+         pwd
          npm i
