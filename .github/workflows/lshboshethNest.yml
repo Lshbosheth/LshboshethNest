@@ -31,8 +31,5 @@ jobs:
        scp: |
             ./* => /home/lshboshethNest
        last_ssh: |
-         cd /home/lshboshethNest &&
-         export NVM_DIR="$HOME/.nvm" &&
-         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && # Load NVM
-         source ~/.bashrc && echo "Bash environment sourced" &&
-         npm i --verbose && echo "npm install completed"
+         cd /home/lshboshethNest
+         npm i
