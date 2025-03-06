@@ -31,9 +31,6 @@ jobs:
        scp: |
             ./* => /home/lshboshethNest
        last_ssh: |
-        # cd /home/lshboshethNest
-        # source ~/.bashrc   # 强制加载用户环境
-        # npm i
-         cd /home/lshboshethNest && pwd # 确认当前目录
-         source ~/.bashrc && echo "Bash environment sourced" # 确认环境变量已加载
-         npm i --verbose && echo "npm install completed" # 使用--verbose选项获取更详细的输出
+         cd /home/lshboshethNest && pwd
+         source ~/.bashrc && echo "Bash environment sourced"
+         npm i --verbose && echo "npm install completed
