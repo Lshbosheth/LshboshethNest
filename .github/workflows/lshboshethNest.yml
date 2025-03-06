@@ -31,7 +31,7 @@ jobs:
        scp: |
             ./* => /home/lshboshethNest
        last_ssh: |
-         cd /home/lshboshethNest && pwd
-         echo $PATH
-         source ~/.bashrc && echo "Bash environment sourced"
+         cd /home/lshboshethNest &&
+         source ~/.bash_profile && echo "Bash profile sourced" || echo "Failed to source bash profile" &&
+         echo $PATH &&
          npm i --verbose && echo "npm install completed"
