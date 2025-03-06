@@ -31,7 +31,9 @@ jobs:
        scp: |
             ./* => /home/lshboshethNest
        last_ssh: |
-         cd /home/lshboshethNest &&
-         source ~/.profile && echo "Bash profile sourced" || echo "Failed to source bash profile" &&
-         echo $PATH &&
-         npm i --verbose && echo "npm install completed"
+         cd /home/lshboshethNest
+         cd /root/.nvm/versions/node/v22.14.0/bin
+         pwd
+         # source ~/.profile && echo "Bash profile sourced" || echo "Failed to source bash profile" &&
+         # echo $PATH &&
+         # npm i --verbose && echo "npm install completed"
