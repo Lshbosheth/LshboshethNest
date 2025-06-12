@@ -129,6 +129,14 @@ export class UtilsController {
     return this.utilsService.testDeepSeek();
   }
 
+  @Sse('testGemini')
+  @ApiOperation({
+    summary: 'Gemini',
+  })
+  testGemini() {
+    return this.utilsService.testGemini();
+  }
+
   @Post('postDeepSeek')
   @Sse()
   @ApiOperation({

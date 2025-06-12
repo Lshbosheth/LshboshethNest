@@ -13,6 +13,8 @@ import * as svgCaptcha from 'svg-captcha';
 import { createTransport, Transporter } from 'nodemailer';
 import OpenAI from 'openai';
 import { interval, Observable } from 'rxjs';
+import { GoogleGenAI } from '@google/genai';
+
 @Injectable()
 export class UtilsService {
   captcha: string = '';
@@ -174,5 +176,18 @@ export class UtilsService {
     } catch (error) {
       console.error('发生错误:', error);
     }
+  }
+
+  async testGemini() {
+    const ai = new GoogleGenAI({
+      apiKey: 'AIzaSyDLI0byYc1q48sDcOSn4Q9x-HMJwyhJ3AU',
+    });
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash-preview-05-20',
+      contents: '123',
+    });
+    console.log(response.text);
+    return response.text;
   }
 }
