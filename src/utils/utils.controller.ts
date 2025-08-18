@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UtilsService } from './utils.service';
+import { LoggerService } from '../logger.service';
 import { QrCodeDto } from './dto/qrCode.dto';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
@@ -23,7 +24,10 @@ import OpenAI from 'openai';
 @ApiTags('工具模块')
 @Controller('utils')
 export class UtilsController {
-  constructor(private readonly utilsService: UtilsService) {}
+  constructor(
+    private readonly utilsService: UtilsService,
+    private readonly loggerService: LoggerService,
+  ) {}
 
   @Get('/captcha')
   @ApiOperation({
@@ -51,6 +55,7 @@ export class UtilsController {
   })
   async qrCode(@Body() qrCodeDto: QrCodeDto) {
     console.log(qrCodeDto);
+    this.loggerService.log('入参', qrCodeDto);
     const url = await this.utilsService.createQrCode(qrCodeDto);
     return { path: url, name: 'qrCode.jpg' };
   }

@@ -5,6 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './global/interceptor/transform/transform.interceptor';
 import { HttpExceptionFilter } from './global/filter/http-exception/http-exception.filter';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import compression from 'compression';
 
 async function bootstrap() {
@@ -18,11 +19,16 @@ async function bootstrap() {
   });
   app.use(compression());
   app.useStaticAssets('public');
+  const appLogger = app.get(WINSTON_MODULE_NEST_PROVIDER);
+  app.useLogger(appLogger);
   generateDocument(app);
   const port = +process.env.SERVICE_PORT;
   await app.listen(port, () => {
-    console.group(`项目运行在 http://localhost:${port}/api/swagger`);
-    console.groupEnd();
+    appLogger.log(
+      'info',
+      `服务启动成功，运行在 http://localhost:${port}/api/swagger`,
+      { context: 'Bootstrap' }, // 可选的元数据
+    );
   });
 }
 bootstrap();

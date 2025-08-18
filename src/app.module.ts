@@ -10,13 +10,16 @@ import { AuthModule } from './auth/auth.module';
 import { FileManageModule } from './file-manage/file-manage.module';
 import { WechatModule } from './wechat/wechat.module';
 import { SocketModule } from './socket/socket.module';
-
+import { WinstonModule } from 'nest-winston';
+import { LoggerService } from './logger.service';
+import { loggerConfig } from './logger.config';
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       isGlobal: true,
     }),
+    WinstonModule.forRoot(loggerConfig),
     TypeOrmModule.forRoot(MySqlLocalConfig),
     UserModule,
     UtilsModule,
@@ -26,6 +29,6 @@ import { SocketModule } from './socket/socket.module';
     SocketModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, LoggerService],
 })
 export class AppModule {}
