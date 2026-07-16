@@ -1,0 +1,8 @@
+# 统一换行符为 LF，解决 Windows 上 CRLF 与 Prettier LF 冲突
+* text=auto eol=lf
+
+# 明确按语言类型归一化
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
