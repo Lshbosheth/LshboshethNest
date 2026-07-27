@@ -6,6 +6,7 @@ import { Not, Repository } from 'typeorm';
 import { del, list, put } from '@vercel/blob';
 import qiniu from 'qiniu';
 import process from 'process';
+import { Readable } from 'stream';
 
 @Injectable()
 export class FileManageService {
@@ -77,7 +78,8 @@ export class FileManageService {
   }
 
   async uploadToVercelBlob(filename: string, content: Buffer): Promise<string> {
-    const { url } = await put(filename, content, { access: 'public' });
+    const stream = Readable.from(content);
+    const { url } = await put(filename, stream, { access: 'public' });
     return url;
   }
 

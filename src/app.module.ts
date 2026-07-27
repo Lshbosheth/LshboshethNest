@@ -1,4 +1,5 @@
-import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import * as dotenv from 'dotenv';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -13,6 +14,22 @@ import { SocketModule } from './socket/socket.module';
 import { WinstonModule } from 'nest-winston';
 import { LoggerService } from './logger.service';
 import { loggerConfig } from './logger.config';
+import { LocalOssModule } from './local-oss/local-oss.module';
+import { shouldEnableDatabase } from './database-enabled';
+
+dotenv.config();
+
+const databaseEnabled = shouldEnableDatabase();
+const databaseModules = databaseEnabled
+  ? [
+      TypeOrmModule.forRoot(MySqlLocalConfig),
+      UserModule,
+      UtilsModule,
+      AuthModule,
+      FileManageModule,
+    ]
+  : [];
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,11 +37,8 @@ import { loggerConfig } from './logger.config';
       isGlobal: true,
     }),
     WinstonModule.forRoot(loggerConfig),
-    TypeOrmModule.forRoot(MySqlLocalConfig),
-    UserModule,
-    UtilsModule,
-    AuthModule,
-    FileManageModule,
+    ...databaseModules,
+    LocalOssModule,
     WechatModule,
     SocketModule,
   ],

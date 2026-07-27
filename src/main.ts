@@ -7,6 +7,7 @@ import { HttpExceptionFilter } from './global/filter/http-exception/http-excepti
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import compression from 'compression';
+import { createLocalOssPublicMiddleware } from './local-oss/local-oss-public.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -18,6 +19,7 @@ async function bootstrap() {
     origin: '*',
   });
   app.use(compression());
+  app.use(createLocalOssPublicMiddleware());
   app.useStaticAssets('public');
   const appLogger = app.get(WINSTON_MODULE_NEST_PROVIDER);
   app.useLogger(appLogger);

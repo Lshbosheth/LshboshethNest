@@ -9,6 +9,8 @@ const VercelConfig: TypeOrmModuleOptions = {
   database: 'verceldb',
   ssl: { rejectUnauthorized: false }, // For local development, consider removing this in production
   synchronize: true, // Automatically create database tables based on entities (set to false in production)
+  retryAttempts: Number(process.env.DB_RETRY_ATTEMPTS || 1),
+  retryDelay: Number(process.env.DB_RETRY_DELAY || 1000),
   logging: process.env.NODE_ENV === 'development' ? true : ['error'],
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
 };
@@ -21,8 +23,8 @@ const MySqlLocalConfig: TypeOrmModuleOptions = {
   password: 'NAna-0218',
   database: 'nesttest',
   synchronize: true,
-  retryDelay: 500,
-  retryAttempts: 10,
+  retryDelay: Number(process.env.DB_RETRY_DELAY || 1000),
+  retryAttempts: Number(process.env.DB_RETRY_ATTEMPTS || 1),
   autoLoadEntities: true,
   logging: process.env.NODE_ENV === 'development' ? true : ['error'],
 };
