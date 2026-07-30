@@ -7,6 +7,7 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import express, { Express } from 'express';
 import compression from 'compression';
+import { generateDocument } from '../src/swagger';
 
 let cachedApp: Express | null = null;
 
@@ -30,6 +31,8 @@ async function createApp(): Promise<Express> {
   app.use(compression());
 
   // Vercel serverless 环境不支持本地文件系统，移除 localOss 中间件
+
+  generateDocument(app);
 
   await app.init();
 

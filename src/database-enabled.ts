@@ -25,16 +25,21 @@ export function shouldEnableDatabase() {
 }
 
 function isLocalDatabaseListening(host: string, port: number) {
+  // netstat.exe 探测只在 Windows 本地有意义
+  if (process.platform !== 'win32') {
+    return false;
+  }
+
   if (!['localhost', '127.0.0.1', '::1'].includes(host)) {
     return false;
   }
 
   try {
-    const output = execFileSync(
-      'netstat.exe',
-      ['-ano', '-p', 'tcp'],
-      { encoding: 'utf-8', timeout: 1000, windowsHide: true },
-    );
+    const output = execFileSync('netstat.exe', ['-ano', '-p', 'tcp'], {
+      encoding: 'utf-8',
+      timeout: 1000,
+      windowsHide: true,
+    });
     const listeningPattern = new RegExp(
       `^\\s*TCP\\s+\\S+:${port}\\s+\\S+\\s+LISTENING\\s+\\d+\\s*$`,
       'im',
