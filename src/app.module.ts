@@ -15,6 +15,7 @@ import { WinstonModule } from 'nest-winston';
 import { LoggerService } from './logger.service';
 import { loggerConfig } from './logger.config';
 import { LocalOssModule } from './local-oss/local-oss.module';
+import { CloudflareModule } from './cloudflare/cloudflare.module';
 import { shouldEnableDatabase } from './database-enabled';
 
 dotenv.config();
@@ -39,6 +40,7 @@ const databaseModules = databaseEnabled
     WinstonModule.forRoot(loggerConfig),
     ...databaseModules,
     LocalOssModule,
+    CloudflareModule,
     WechatModule,
     SocketModule,
   ],
