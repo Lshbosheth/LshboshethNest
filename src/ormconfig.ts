@@ -8,7 +8,7 @@ const VercelConfig: TypeOrmModuleOptions = {
   password: 'WH6FZNOe5asP',
   database: 'verceldb',
   ssl: { rejectUnauthorized: false }, // For local development, consider removing this in production
-  synchronize: true, // Automatically create database tables based on entities (set to false in production)
+  synchronize: false, // 改成 false，避免重复建表冲突
   retryAttempts: Number(process.env.DB_RETRY_ATTEMPTS || 1),
   retryDelay: Number(process.env.DB_RETRY_DELAY || 1000),
   logging: process.env.NODE_ENV === 'development' ? true : ['error'],
