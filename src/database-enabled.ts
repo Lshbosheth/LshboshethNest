@@ -12,6 +12,11 @@ export function shouldEnableDatabase() {
   if (mode === 'false') return false;
   if (mode === 'true') return true;
 
+  // Vercel 环境检测：存在 VERCEL 环境变量时强制启用数据库
+  if (process.env.VERCEL || process.env.VERCEL_ENV) {
+    return true;
+  }
+
   const config =
     String(process.env.DB_TARGET || 'mysql').toLowerCase() === 'postgres'
       ? VercelConfig

@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MySqlLocalConfig } from './ormconfig';
+import { MySqlLocalConfig, VercelConfig } from './ormconfig';
 import { UtilsModule } from './utils/utils.module';
 import { AuthModule } from './auth/auth.module';
 import { FileManageModule } from './file-manage/file-manage.module';
@@ -17,17 +17,23 @@ import { loggerConfig } from './logger.config';
 import { LocalOssModule } from './local-oss/local-oss.module';
 import { CloudflareModule } from './cloudflare/cloudflare.module';
 import { shouldEnableDatabase } from './database-enabled';
+import { CourseProgressModule } from './course-progress/course-progress.module';
 
 dotenv.config();
 
 const databaseEnabled = shouldEnableDatabase();
+// Vercel 环境使用 Postgres，本地使用 MySQL
+const isVercel = process.env.VERCEL || process.env.VERCEL_ENV;
+const databaseConfig = isVercel ? VercelConfig : MySqlLocalConfig;
+
 const databaseModules = databaseEnabled
   ? [
-      TypeOrmModule.forRoot(MySqlLocalConfig),
+      TypeOrmModule.forRoot(databaseConfig),
       UserModule,
       UtilsModule,
       AuthModule,
       FileManageModule,
+      CourseProgressModule,
     ]
   : [];
 
