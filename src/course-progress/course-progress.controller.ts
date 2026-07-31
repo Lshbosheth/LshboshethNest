@@ -39,19 +39,18 @@ export class CourseProgressController {
       dto.dayId,
       dto.status,
     );
-    return { success: true, data: result };
+    return result; // 直接返回，让拦截器包装
   }
 
   @Get('stats')
   @ApiOperation({ summary: '获取课程统计' })
   async getCourseStats(@Query() query: CourseStatsDto, @Ip() ip: string) {
     const userId = this.getUserId(ip);
-    const stats = await this.progressService.getCourseStats(
+    return await this.progressService.getCourseStats(
       userId,
       query.courseId,
       Number(query.totalDays),
     );
-    return stats;
   }
 
   @Post('reset')
