@@ -10,7 +10,7 @@ services:
     ports:
       - "127.0.0.1:1222:1222"
     volumes:
-      - /data/oss/demo:/data/oss/demo
+      - /data/oss:/data/oss
       - /data/lshbosheth/nest-logs:/app/logs
     networks:
       - lshbosheth
