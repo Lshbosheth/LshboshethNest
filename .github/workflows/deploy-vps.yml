@@ -19,21 +19,16 @@ jobs:
       DEPLOY_PATH: /data/lshbosheth/LshboshethNest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Infisical CLI
-        run: |
-          curl -1sLf 'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' | sudo -E bash
-          sudo apt-get update
-          sudo apt-get install -y infisical
       - name: Export production secrets from Infisical
-        env:
-          INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
-          INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-          INFISICAL_PROJECT_ID: ${{ secrets.INFISICAL_PROJECT_ID }}
-        run: |
-          test -n "$INFISICAL_PROJECT_ID"
-          infisical login --method=universal-auth --client-id="$INFISICAL_CLIENT_ID" --client-secret="$INFISICAL_CLIENT_SECRET" --silent
-          infisical export --env=prod --projectId="$INFISICAL_PROJECT_ID" --format=dotenv > .env.vps
-          test -s .env.vps
+        uses: Infisical/secrets-action@v1.0.9
+        with:
+          method: universal
+          client-id: ${{ secrets.INFISICAL_CLIENT_ID }}
+          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+          project-slug: lshbosheth
+          env-slug: prod
+          export-type: file
+          file-output-path: .env.vps
       - name: Restrict environment file permissions
         run: chmod 600 .env.vps
       - uses: webfactory/ssh-agent@v0.9.0
