@@ -28,8 +28,9 @@ export class LocalOssTokenGuard implements CanActivate {
       ? authorization.slice(7).trim()
       : '';
     const headerToken = String(request.headers['x-upload-token'] || '').trim();
+    const queryToken = String(request.query?.token || '').trim();
 
-    if (bearerToken === configuredToken || headerToken === configuredToken) {
+    if (bearerToken === configuredToken || headerToken === configuredToken || queryToken === configuredToken) {
       return true;
     }
 
