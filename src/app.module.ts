@@ -18,6 +18,7 @@ import { LocalOssModule } from './local-oss/local-oss.module';
 import { CloudflareModule } from './cloudflare/cloudflare.module';
 import { shouldEnableDatabase } from './database-enabled';
 import { CourseProgressModule } from './course-progress/course-progress.module';
+import { OssAdminModule } from './oss-admin/oss-admin.module';
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ const databaseModules = databaseEnabled
     WinstonModule.forRoot(loggerConfig),
     ...databaseModules,
     LocalOssModule,
+    OssAdminModule,
     CloudflareModule,
     WechatModule,
     SocketModule,
