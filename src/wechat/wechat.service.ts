@@ -6,7 +6,7 @@ import CryptoJS, { SHA1 } from 'crypto-js';
 @Injectable()
 export class WechatService {
   checkSignature(signature: any, timestamp: any, nonce: any): boolean {
-    const token = 'NAna0218';
+    const token = process.env.WECHAT_TOKEN || '';
     const tmpArr = [token, timestamp, nonce].sort((a, b) => a.localeCompare(b));
     const tmpStr = tmpArr.join('');
     const hashedStr = SHA1(tmpStr).toString(CryptoJS.enc.Hex);

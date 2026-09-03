@@ -13,6 +13,10 @@ Cloudflare Tunnel 暴露到公网。
 - Nest 服务和 Cloudflare Tunnel 分别由 Windows 计划任务直接守护
 - Cloudflare Tunnel 负责把公网域名转发到本机 Nest 端口，不需要路由器端口映射
 
+VPS 部署时将 `LOCAL_OSS_ROOT` 设置为 `/data/oss/demo`。服务器通用 OSS
+项目使用同一数据盘的 `/data/oss` 根目录，但 Demo 上传内容只写入其 `demo`
+子目录，彼此隔离。
+
 例子：
 
 ```text

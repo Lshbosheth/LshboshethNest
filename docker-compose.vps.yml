@@ -1,0 +1,20 @@
+services:
+  nest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lshbosheth-nest
+    restart: unless-stopped
+    env_file:
+      - .env.vps
+    ports:
+      - "127.0.0.1:1222:1222"
+    volumes:
+      - /data/oss/demo:/data/oss/demo
+      - /data/lshbosheth/nest-logs:/app/logs
+    networks:
+      - lshbosheth
+
+networks:
+  lshbosheth:
+    external: true

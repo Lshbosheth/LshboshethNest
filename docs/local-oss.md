@@ -14,6 +14,10 @@ and exposes them to the public internet through Cloudflare Tunnel.
 - Uses Cloudflare Tunnel to publish the local Nest port without opening router
   ports
 
+For VPS deployment set `LOCAL_OSS_ROOT=/data/oss/demo`. The standalone OSS
+project uses `/data/oss` as its root, while Demo uploads remain isolated under
+the `demo` subdirectory.
+
 Example:
 
 ```text

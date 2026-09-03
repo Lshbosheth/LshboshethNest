@@ -1,0 +1,57 @@
+name: Deploy Nest API to VPS
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nest-vps-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_PATH: /data/lshbosheth/LshboshethNest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Infisical CLI
+        run: |
+          curl -1sLf 'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' | sudo -E bash
+          sudo apt-get update
+          sudo apt-get install -y infisical
+      - name: Export production secrets
+        env:
+          INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+          INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+          INFISICAL_PROJECT_ID: ${{ secrets.INFISICAL_PROJECT_ID }}
+        run: |
+          test -n "$INFISICAL_PROJECT_ID"
+          infisical login --method=universal-auth --client-id="$INFISICAL_CLIENT_ID" --client-secret="$INFISICAL_CLIENT_SECRET" --silent
+          infisical export --env=prod --projectId="$INFISICAL_PROJECT_ID" --format=dotenv > .env.vps
+          chmod 600 .env.vps
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+      - name: Trust VPS host key
+        run: mkdir -p ~/.ssh && ssh-keyscan -p "${{ secrets.VPS_PORT || 22 }}" "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+      - name: Upload source
+        run: |
+          ssh -p "${{ secrets.VPS_PORT || 22 }}" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p '$DEPLOY_PATH'"
+          rsync -az --delete --exclude='.env' --exclude='.env.*' --exclude='node_modules' --exclude='dist' --exclude='logs' \
+            -e "ssh -p ${{ secrets.VPS_PORT || 22 }}" ./ \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:$DEPLOY_PATH/"
+      - name: Upload production environment
+        run: |
+          scp -P "${{ secrets.VPS_PORT || 22 }}" .env.vps \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:$DEPLOY_PATH/.env.vps"
+          ssh -p "${{ secrets.VPS_PORT || 22 }}" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            "chmod 600 '$DEPLOY_PATH/.env.vps'"
+      - name: Build and restart container
+        run: |
+          ssh -p "${{ secrets.VPS_PORT || 22 }}" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            "cd '$DEPLOY_PATH' && test -f .env.vps && docker compose -f docker-compose.vps.yml up -d --build --remove-orphans"

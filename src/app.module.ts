@@ -22,9 +22,10 @@ import { CourseProgressModule } from './course-progress/course-progress.module';
 dotenv.config();
 
 const databaseEnabled = shouldEnableDatabase();
-// Vercel 环境使用 Postgres，本地使用 MySQL
-const isVercel = process.env.VERCEL || process.env.VERCEL_ENV;
-const databaseConfig = isVercel ? VercelConfig : MySqlLocalConfig;
+const usePostgres =
+  String(process.env.DB_TARGET || '').toLowerCase() === 'postgres' ||
+  Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
+const databaseConfig = usePostgres ? VercelConfig : MySqlLocalConfig;
 
 const databaseModules = databaseEnabled
   ? [

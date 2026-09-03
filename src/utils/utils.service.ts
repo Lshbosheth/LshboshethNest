@@ -24,12 +24,12 @@ export class UtilsService {
     private fileManageService: FileManageService,
   ) {
     this.transporter = createTransport({
-      host: 'smtp.qq.com', // smtp服务的域名
-      port: 587, // smtp服务的端口
-      secure: false,
+      host: process.env.SMTP_HOST || 'smtp.qq.com',
+      port: Number(process.env.SMTP_PORT || 587),
+      secure: process.env.SMTP_SECURE === 'true',
       auth: {
-        user: 'lshbosheth@qq.com', // 你的邮箱地址
-        pass: 'mrgooyabtdcibdjd', // 你的授权码
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
       },
     });
   }
@@ -38,7 +38,7 @@ export class UtilsService {
     await this.transporter.sendMail({
       from: {
         name: 'lshbosheth',
-        address: 'lshbosheth@qq.com', // 你的邮箱地址
+        address: process.env.SMTP_USER,
       },
       to,
       subject,
@@ -180,7 +180,7 @@ export class UtilsService {
 
   async testGemini() {
     const ai = new GoogleGenAI({
-      apiKey: 'AIzaSyDLI0byYc1q48sDcOSn4Q9x-HMJwyhJ3AU',
+      apiKey: process.env.GEMINI_API_KEY,
     });
 
     const response = await ai.models.generateContent({
