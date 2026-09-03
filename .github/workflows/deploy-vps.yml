@@ -32,6 +32,7 @@ jobs:
       - name: Restrict environment file permissions
         run: |
           test -s .env.vps
+          grep -q '^SERVICE_PORT=' .env.vps || echo 'SERVICE_PORT=1222' >> .env.vps
           chmod 600 .env.vps
       - uses: webfactory/ssh-agent@v0.9.0
         with:
