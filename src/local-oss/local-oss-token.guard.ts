@@ -13,9 +13,11 @@ export class LocalOssTokenGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<Request>();
-    const configuredToken =
+    const configuredToken = (
       this.configService.get<string>('LOCAL_OSS_TOKEN') ||
-      this.configService.get<string>('LOCAL_OSS_UPLOAD_TOKEN');
+      this.configService.get<string>('LOCAL_OSS_UPLOAD_TOKEN') ||
+      ''
+    ).trim().replace(/^(['"])(.*)\1$/, '$2');
 
     if (!configuredToken) {
       throw new UnauthorizedException('Local OSS token is not configured');
