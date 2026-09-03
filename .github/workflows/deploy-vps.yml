@@ -28,9 +28,11 @@ jobs:
           project-slug: lshbosheth
           env-slug: prod
           export-type: file
-          file-output-path: .env.vps
+          file-output-path: ${{ github.workspace }}/.env.vps
       - name: Restrict environment file permissions
-        run: chmod 600 .env.vps
+        run: |
+          test -s "${{ github.workspace }}/.env.vps"
+          chmod 600 "${{ github.workspace }}/.env.vps"
       - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
