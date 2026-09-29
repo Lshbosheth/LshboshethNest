@@ -33,6 +33,7 @@ jobs:
         run: |
           test -s .env.vps
           grep -q '^SERVICE_PORT=' .env.vps || echo 'SERVICE_PORT=1222' >> .env.vps
+          grep -q '^CLOUDFLARE_ZONE_ID=' .env.vps || echo 'CLOUDFLARE_ZONE_ID=2b66c6c7c7b6cb5926063e9765ce80c4' >> .env.vps
           chmod 600 .env.vps
       - uses: webfactory/ssh-agent@v0.9.0
         with:
