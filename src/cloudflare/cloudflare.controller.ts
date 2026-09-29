@@ -7,14 +7,17 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { CloudflareService } from './cloudflare.service';
 import { CreateDnsRecordDto } from './dto/create-dns-record.dto';
 import { UpdateDnsRecordDto } from './dto/update-dns-record.dto';
+import { CloudflareBridgeGuard } from './cloudflare-bridge.guard';
 
 @ApiTags('Cloudflare DNS 管理')
 @Controller('cloudflare/dns')
+@UseGuards(CloudflareBridgeGuard)
 export class CloudflareController {
   constructor(private readonly cloudflareService: CloudflareService) {}
 
