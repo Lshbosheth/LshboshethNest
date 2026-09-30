@@ -97,6 +97,10 @@ export class CloudflareService {
       result.zoneError = error.response?.data?.errors?.[0] || error.message;
     }
 
+    // Account Owned Token 走不了 /user/tokens/verify（会报 1000 "Invalid API Token"），
+    // 只要 zone 能访问就说明凭据实际可用
+    result.tokenUsable = result.zoneAccessible === true;
+
     return result;
   }
 
