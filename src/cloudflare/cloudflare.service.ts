@@ -169,4 +169,21 @@ export class CloudflareService {
       throw this.toHttpException(error, '删除 DNS 记录失败');
     }
   }
+
+  /** 清空整站缓存（purge_everything）：缓存随后随访问自动重建，属于低风险写操作 */
+  async purgeCache() {
+    this.ensureConfigured();
+    try {
+      const response = await this.client.post(
+        `/zones/${this.zoneId}/purge_cache`,
+        { purge_everything: true },
+      );
+      return {
+        purged: Boolean(response.data?.success),
+        zoneId: this.zoneId,
+      };
+    } catch (error) {
+      throw this.toHttpException(error, '清理 Cloudflare 缓存失败');
+    }
+  }
 }
